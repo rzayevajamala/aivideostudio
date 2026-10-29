@@ -1,0 +1,1119 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Video Studio - Modern AI Video Generation Platform</title>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0f3ff',
+                            100: '#e0e7ff',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                            900: '#312e81',
+                        },
+                        dark: {
+                            base: '#090d16',
+                            card: '#111827',
+                            border: '#1f2937',
+                            hover: '#1e293b'
+                        }
+                    },
+                    animation: {
+                        'pulse-glow': 'pulseGlow 3s infinite alternate',
+                        'gradient-x': 'gradientX 6s ease infinite',
+                        'spin-slow': 'spin 8s linear infinite',
+                    },
+                    keyframes: {
+                        pulseGlow: {
+                            '0%': { boxShadow: '0 0 15px rgba(99, 102, 241, 0.2)' },
+                            '100%': { boxShadow: '0 0 35px rgba(168, 85, 247, 0.5)' }
+                        },
+                        gradientX: {
+                            '0%, 100%': { 'background-size': '200% 200%', 'background-position': 'left center' },
+                            '50%': { 'background-size': '200% 200%', 'background-position': 'right center' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #070a12;
+            color: #f3f4f6;
+            overflow-x: hidden;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0d111d;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #252e42;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #3b4866;
+        }
+
+        /* Glassmorphism Styles */
+        .glass-panel {
+            background: rgba(17, 24, 39, 0.7);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .glass-nav {
+            background: rgba(9, 13, 22, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .neon-border-glow {
+            position: relative;
+        }
+        .neon-border-glow::before {
+            content: '';
+            position: absolute;
+            inset: -1px;
+            border-radius: inherit;
+            padding: 1px;
+            background: linear-gradient(135deg, #6366f1, #a855f7, #ec4899);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+            opacity: 0.7;
+        }
+
+        /* Custom Range Slider */
+        input[type=range] {
+            -webkit-appearance: none;
+            background: transparent;
+        }
+        input[type=range]:focus {
+            outline: none;
+        }
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 6px;
+            cursor: pointer;
+            background: #1f2937;
+            border-radius: 3px;
+        }
+        input[type=range]::-webkit-slider-thumb {
+            height: 16px;
+            width: 16px;
+            border-radius: 50%;
+            background: #818cf8;
+            cursor: pointer;
+            -webkit-appearance: none;
+            margin-top: -5px;
+            box-shadow: 0 0 10px rgba(99, 102, 241, 0.5);
+        }
+
+        /* Active style selection */
+        .style-card.selected {
+            border-color: #818cf8;
+            background: rgba(99, 102, 241, 0.15);
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+        }
+        .style-card.selected .check-icon {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* Toast notification */
+        #toast {
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between text-slate-100 antialiased selection:bg-indigo-500 selection:text-white">
+
+    <!-- Ambient Background Lighting -->
+    <div class="fixed top-0 left-1/4 -translate-x-1/2 w-[500px] h-[500px] bg-indigo-600/15 blur-[140px] rounded-full pointer-events-none -z-10"></div>
+    <div class="fixed bottom-0 right-1/4 translate-x-1/2 w-[600px] h-[600px] bg-purple-600/10 blur-[160px] rounded-full pointer-events-none -z-10"></div>
+
+    <!-- MAIN NAVBAR -->
+    <header class="sticky top-0 z-40 glass-nav px-4 lg:px-8 py-3.5 transition-all">
+        <div class="max-w-7xl mx-auto flex items-center justify-between gap-4">
+            
+            <!-- Brand Logo -->
+            <div class="flex items-center gap-3">
+                <div class="h-10 w-10 rounded-xl bg-gradient-to-tr from-indigo-600 via-purple-600 to-pink-500 flex items-center justify-center shadow-lg shadow-indigo-500/25">
+                    <i data-lucide="sparkles" class="w-5 h-5 text-white"></i>
+                </div>
+                <div>
+                    <span class="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white via-slate-200 to-indigo-300 tracking-tight">
+                        AI Video Studio
+                    </span>
+                    <span class="hidden sm:inline-block ml-2 text-[10px] font-semibold px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 uppercase tracking-wider">v2.5 Pro</span>
+                </div>
+            </div>
+
+            <!-- Navigation Tabs -->
+            <nav class="hidden md:flex items-center gap-1 bg-slate-900/80 p-1.5 rounded-2xl border border-slate-800/80">
+                <button onclick="switchTab('text-to-video')" id="tab-text-to-video" class="tab-btn flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all text-white bg-indigo-600 shadow-md shadow-indigo-600/20">
+                    <i data-lucide="wand2" class="w-4 h-4"></i>
+                    Text-to-Video
+                </button>
+                <button onclick="switchTab('image-to-video')" id="tab-image-to-video" class="tab-btn flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all text-slate-400 hover:text-white hover:bg-slate-800/60">
+                    <i data-lucide="image" class="w-4 h-4"></i>
+                    Image-to-Video
+                </button>
+                <button onclick="switchTab('library')" id="tab-library" class="tab-btn flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all text-slate-400 hover:text-white hover:bg-slate-800/60">
+                    <i data-lucide="folder-kanban" class="w-4 h-4"></i>
+                    Project Library
+                </button>
+                <button onclick="switchTab('settings')" id="tab-settings" class="tab-btn flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all text-slate-400 hover:text-white hover:bg-slate-800/60">
+                    <i data-lucide="sliders" class="w-4 h-4"></i>
+                    Settings
+                </button>
+            </nav>
+
+            <!-- User Credits & Profile -->
+            <div class="flex items-center gap-3">
+                <div class="hidden sm:flex items-center gap-2 bg-indigo-950/40 border border-indigo-500/20 px-3.5 py-1.5 rounded-xl">
+                    <i data-lucide="zap" class="w-4 h-4 text-amber-400 fill-amber-400"></i>
+                    <span class="text-xs font-semibold text-slate-200"><span id="credit-count">1,240</span> Credits</span>
+                    <button onclick="showToast('Upgrade dialog opened')" class="text-[10px] bg-indigo-600 hover:bg-indigo-500 text-white font-bold px-2 py-0.5 rounded-md ml-1 transition">BUY</button>
+                </div>
+                
+                <div class="h-9 w-9 rounded-xl bg-gradient-to-br from-slate-700 to-slate-800 border border-slate-700 flex items-center justify-center text-sm font-semibold cursor-pointer hover:border-indigo-500 transition">
+                    JD
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Navigation Tabs Bar -->
+        <div class="flex md:hidden items-center justify-around mt-3 pt-2 border-t border-slate-800/60 text-xs">
+            <button onclick="switchTab('text-to-video')" class="mobile-tab-btn flex flex-col items-center gap-1 text-indigo-400 font-medium">
+                <i data-lucide="wand2" class="w-4 h-4"></i> Text
+            </button>
+            <button onclick="switchTab('image-to-video')" class="mobile-tab-btn flex flex-col items-center gap-1 text-slate-400 hover:text-white">
+                <i data-lucide="image" class="w-4 h-4"></i> Image
+            </button>
+            <button onclick="switchTab('library')" class="mobile-tab-btn flex flex-col items-center gap-1 text-slate-400 hover:text-white">
+                <i data-lucide="folder-kanban" class="w-4 h-4"></i> Library
+            </button>
+            <button onclick="switchTab('settings')" class="mobile-tab-btn flex flex-col items-center gap-1 text-slate-400 hover:text-white">
+                <i data-lucide="sliders" class="w-4 h-4"></i> Settings
+            </button>
+        </div>
+    </header>
+
+    <!-- MAIN BODY CONTENT -->
+    <main class="max-w-7xl mx-auto px-4 lg:px-8 py-6 w-full flex-grow">
+
+        <!-- TAB 1 & 2: GENERATOR VIEW (Text-to-Video & Image-to-Video) -->
+        <div id="view-generator" class="space-y-8">
+            
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                
+                <!-- LEFT COLUMN: PROMPT & CONTROLS (7 COLS) -->
+                <div class="lg:col-span-7 space-y-6">
+
+                    <!-- Image Input Banner (Visible only for Image-to-Video tab) -->
+                    <div id="image-upload-container" class="hidden glass-panel p-5 rounded-2xl border border-dashed border-indigo-500/40 hover:border-indigo-500 transition cursor-pointer text-center group">
+                        <input type="file" id="image-input" class="hidden" accept="image/*" onchange="handleImageUpload(event)">
+                        <label for="image-input" class="cursor-pointer block">
+                            <div id="upload-placeholder" class="space-y-2 py-4">
+                                <div class="w-12 h-12 rounded-full bg-indigo-500/10 text-indigo-400 flex items-center justify-center mx-auto group-hover:scale-110 transition">
+                                    <i data-lucide="upload-cloud" class="w-6 h-6"></i>
+                                </div>
+                                <p class="text-sm font-semibold text-slate-200">Upload Source Image / Keyframe</p>
+                                <p class="text-xs text-slate-400">PNG, JPG, WEBP up to 20MB. Drag & drop supported.</p>
+                            </div>
+                            <div id="upload-preview" class="hidden relative rounded-xl overflow-hidden max-h-48">
+                                <img id="preview-img" src="" alt="Source preview" class="w-full h-full object-cover">
+                                <button onclick="event.preventDefault(); removeUploadedImage()" class="absolute top-2 right-2 p-1.5 rounded-lg bg-slate-900/80 text-slate-300 hover:text-white">
+                                    <i data-lucide="x" class="w-4 h-4"></i>
+                                </button>
+                            </div>
+                        </label>
+                    </div>
+
+                    <!-- Prompt Input Card -->
+                    <div class="glass-panel p-5 rounded-2xl space-y-4">
+                        <div class="flex items-center justify-between">
+                            <label class="text-sm font-semibold text-slate-200 flex items-center gap-2">
+                                <i data-lucide="sparkles" class="w-4 h-4 text-indigo-400"></i>
+                                Video Prompt
+                            </label>
+                            <button onclick="clearPrompt()" class="text-xs text-slate-400 hover:text-slate-200 flex items-center gap-1 transition">
+                                <i data-lucide="rotate-ccw" class="w-3 h-3"></i> Clear
+                            </button>
+                        </div>
+
+                        <!-- Main Prompt Textarea -->
+                        <div class="relative">
+                            <textarea id="prompt-input" rows="4" 
+                                class="w-full bg-slate-950/70 border border-slate-800 rounded-xl p-4 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition resize-none"
+                                placeholder="Describe the scene in rich detail... e.g., Futuristic cyberpunk metropolis bathed in neon rain, cinematic camera zooming into a glowing flying sports car, 8K ultra resolution, dramatic lighting..."></textarea>
+                            <div class="absolute bottom-3 right-3 text-xs text-slate-500 font-mono" id="char-count">0 / 1000</div>
+                        </div>
+
+                        <!-- Prompt Suggestion Pills -->
+                        <div class="space-y-2">
+                            <div class="text-xs font-medium text-slate-400">Quick Prompt Enhancers:</div>
+                            <div class="flex flex-wrap gap-2">
+                                <button onclick="addPillToPrompt('cinematic lighting, 8k resolution')" class="text-xs bg-slate-800/80 hover:bg-indigo-600/20 hover:border-indigo-500/50 border border-slate-700/60 text-slate-300 px-2.5 py-1 rounded-lg transition flex items-center gap-1.5">
+                                    <i data-lucide="plus" class="w-3 h-3 text-indigo-400"></i> Cinematic Lighting
+                                </button>
+                                <button onclick="addPillToPrompt('slow motion, fluid movement')" class="text-xs bg-slate-800/80 hover:bg-indigo-600/20 hover:border-indigo-500/50 border border-slate-700/60 text-slate-300 px-2.5 py-1 rounded-lg transition flex items-center gap-1.5">
+                                    <i data-lucide="plus" class="w-3 h-3 text-indigo-400"></i> Slow Motion
+                                </button>
+                                <button onclick="addPillToPrompt('photorealistic, Unreal Engine 5 render')" class="text-xs bg-slate-800/80 hover:bg-indigo-600/20 hover:border-indigo-500/50 border border-slate-700/60 text-slate-300 px-2.5 py-1 rounded-lg transition flex items-center gap-1.5">
+                                    <i data-lucide="plus" class="w-3 h-3 text-indigo-400"></i> Hyper-realistic
+                                </button>
+                                <button onclick="addPillToPrompt('volumetric fog, vibrant neon glow')" class="text-xs bg-slate-800/80 hover:bg-indigo-600/20 hover:border-indigo-500/50 border border-slate-700/60 text-slate-300 px-2.5 py-1 rounded-lg transition flex items-center gap-1.5">
+                                    <i data-lucide="plus" class="w-3 h-3 text-indigo-400"></i> Neon Glow
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Style Selection Grid -->
+                    <div class="glass-panel p-5 rounded-2xl space-y-3">
+                        <label class="text-sm font-semibold text-slate-200 flex items-center gap-2">
+                            <i data-lucide="palette" class="w-4 h-4 text-indigo-400"></i>
+                            Visual Style
+                        </label>
+                        
+                        <div class="grid grid-cols-2 sm:grid-cols-5 gap-3" id="style-selector">
+                            
+                            <!-- Style Card 1 -->
+                            <div onclick="selectStyle('Cinematic', this)" class="style-card selected relative rounded-xl border border-slate-800 bg-slate-900/60 p-2.5 text-center cursor-pointer transition hover:border-slate-600 group">
+                                <div class="h-16 rounded-lg bg-gradient-to-tr from-amber-900/40 via-slate-900 to-indigo-950 mb-2 overflow-hidden relative flex items-center justify-center">
+                                    <i data-lucide="film" class="w-6 h-6 text-amber-400 group-hover:scale-110 transition"></i>
+                                </div>
+                                <span class="text-xs font-medium block text-slate-200">Cinematic</span>
+                                <div class="check-icon opacity-100 transition absolute top-2 right-2 bg-indigo-600 rounded-full p-0.5">
+                                    <i data-lucide="check" class="w-3 h-3 text-white"></i>
+                                </div>
+                            </div>
+
+                            <!-- Style Card 2 -->
+                            <div onclick="selectStyle('3D Anime', this)" class="style-card relative rounded-xl border border-slate-800 bg-slate-900/60 p-2.5 text-center cursor-pointer transition hover:border-slate-600 group">
+                                <div class="h-16 rounded-lg bg-gradient-to-tr from-pink-900/40 via-slate-900 to-purple-950 mb-2 overflow-hidden relative flex items-center justify-center">
+                                    <i data-lucide="smile" class="w-6 h-6 text-pink-400 group-hover:scale-110 transition"></i>
+                                </div>
+                                <span class="text-xs font-medium block text-slate-200">3D Anime</span>
+                                <div class="check-icon opacity-0 transition absolute top-2 right-2 bg-indigo-600 rounded-full p-0.5">
+                                    <i data-lucide="check" class="w-3 h-3 text-white"></i>
+                                </div>
+                            </div>
+
+                            <!-- Style Card 3 -->
+                            <div onclick="selectStyle('Photorealistic', this)" class="style-card relative rounded-xl border border-slate-800 bg-slate-900/60 p-2.5 text-center cursor-pointer transition hover:border-slate-600 group">
+                                <div class="h-16 rounded-lg bg-gradient-to-tr from-emerald-900/40 via-slate-900 to-teal-950 mb-2 overflow-hidden relative flex items-center justify-center">
+                                    <i data-lucide="camera" class="w-6 h-6 text-emerald-400 group-hover:scale-110 transition"></i>
+                                </div>
+                                <span class="text-xs font-medium block text-slate-200">Photoreal</span>
+                                <div class="check-icon opacity-0 transition absolute top-2 right-2 bg-indigo-600 rounded-full p-0.5">
+                                    <i data-lucide="check" class="w-3 h-3 text-white"></i>
+                                </div>
+                            </div>
+
+                            <!-- Style Card 4 -->
+                            <div onclick="selectStyle('Cyberpunk', this)" class="style-card relative rounded-xl border border-slate-800 bg-slate-900/60 p-2.5 text-center cursor-pointer transition hover:border-slate-600 group">
+                                <div class="h-16 rounded-lg bg-gradient-to-tr from-cyan-900/40 via-slate-900 to-blue-950 mb-2 overflow-hidden relative flex items-center justify-center">
+                                    <i data-lucide="zap" class="w-6 h-6 text-cyan-400 group-hover:scale-110 transition"></i>
+                                </div>
+                                <span class="text-xs font-medium block text-slate-200">Cyberpunk</span>
+                                <div class="check-icon opacity-0 transition absolute top-2 right-2 bg-indigo-600 rounded-full p-0.5">
+                                    <i data-lucide="check" class="w-3 h-3 text-white"></i>
+                                </div>
+                            </div>
+
+                            <!-- Style Card 5 -->
+                            <div onclick="selectStyle('Fantasy', this)" class="style-card relative rounded-xl border border-slate-800 bg-slate-900/60 p-2.5 text-center cursor-pointer transition hover:border-slate-600 group">
+                                <div class="h-16 rounded-lg bg-gradient-to-tr from-purple-900/40 via-slate-900 to-fuchsia-950 mb-2 overflow-hidden relative flex items-center justify-center">
+                                    <i data-lucide="wand" class="w-6 h-6 text-purple-400 group-hover:scale-110 transition"></i>
+                                </div>
+                                <span class="text-xs font-medium block text-slate-200">Fantasy</span>
+                                <div class="check-icon opacity-0 transition absolute top-2 right-2 bg-indigo-600 rounded-full p-0.5">
+                                    <i data-lucide="check" class="w-3 h-3 text-white"></i>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- Video Controls / Settings Panel -->
+                    <div class="glass-panel p-5 rounded-2xl space-y-5">
+                        <label class="text-sm font-semibold text-slate-200 flex items-center gap-2">
+                            <i data-lucide="settings-2" class="w-4 h-4 text-indigo-400"></i>
+                            Generation Parameters
+                        </label>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                            
+                            <!-- Aspect Ratio Selector -->
+                            <div class="space-y-2">
+                                <label class="text-xs text-slate-400 font-medium">Aspect Ratio</label>
+                                <div class="grid grid-cols-3 gap-2" id="aspect-ratio-group">
+                                    <button onclick="setRatio('16:9', this)" class="ratio-btn flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl bg-indigo-600/20 border border-indigo-500 text-indigo-300 text-xs font-semibold">
+                                        <i data-lucide="monitor" class="w-3.5 h-3.5"></i> 16:9
+                                    </button>
+                                    <button onclick="setRatio('9:16', this)" class="ratio-btn flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl bg-slate-900 border border-slate-800 hover:border-slate-700 text-slate-400 text-xs font-semibold">
+                                        <i data-lucide="smartphone" class="w-3.5 h-3.5"></i> 9:16
+                                    </button>
+                                    <button onclick="setRatio('1:1', this)" class="ratio-btn flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl bg-slate-900 border border-slate-800 hover:border-slate-700 text-slate-400 text-xs font-semibold">
+                                        <i data-lucide="square" class="w-3.5 h-3.5"></i> 1:1
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Duration Selector -->
+                            <div class="space-y-2">
+                                <label class="text-xs text-slate-400 font-medium">Video Duration</label>
+                                <div class="grid grid-cols-3 gap-2" id="duration-group">
+                                    <button onclick="setDuration('5s', this)" class="duration-btn py-2 px-3 rounded-xl bg-indigo-600/20 border border-indigo-500 text-indigo-300 text-xs font-semibold">
+                                        5 sec
+                                    </button>
+                                    <button onclick="setDuration('10s', this)" class="duration-btn py-2 px-3 rounded-xl bg-slate-900 border border-slate-800 hover:border-slate-700 text-slate-400 text-xs font-semibold">
+                                        10 sec
+                                    </button>
+                                    <button onclick="setDuration('15s', this)" class="duration-btn py-2 px-3 rounded-xl bg-slate-900 border border-slate-800 hover:border-slate-700 text-slate-400 text-xs font-semibold">
+                                        15 sec
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Camera Motion -->
+                            <div class="space-y-2">
+                                <label class="text-xs text-slate-400 font-medium">Camera Motion</label>
+                                <select id="camera-motion-select" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-indigo-500">
+                                    <option value="Pan Right & Zoom In">Pan Right & Zoom In</option>
+                                    <option value="Slow Zoom Out">Slow Zoom Out</option>
+                                    <option value="Tilt Up Dynamic">Tilt Up Dynamic</option>
+                                    <option value="Static Drone Overhead">Static Drone Overhead</option>
+                                </select>
+                            </div>
+
+                            <!-- Resolution Selector -->
+                            <div class="space-y-2">
+                                <label class="text-xs text-slate-400 font-medium">Quality Output</label>
+                                <select id="resolution-select" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-indigo-500">
+                                    <option value="720p">720p (Fastest)</option>
+                                    <option value="1080p" selected>1080p Full HD (Recommended)</option>
+                                    <option value="4K">4K Ultra HD (Pro)</option>
+                                </select>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- GENERATE BUTTON -->
+                    <div>
+                        <button id="generate-btn" onclick="startVideoGeneration()" class="w-full py-4 px-6 rounded-2xl bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 hover:from-indigo-500 hover:to-pink-500 text-white font-bold text-base shadow-xl shadow-indigo-600/30 transition transform active:scale-[0.99] flex items-center justify-center gap-3">
+                            <i data-lucide="sparkles" class="w-5 h-5 fill-white"></i>
+                            <span>Generate Video (30 Credits)</span>
+                        </button>
+                    </div>
+
+                </div>
+
+                <!-- RIGHT COLUMN: LIVE PREVIEW & PLAYER (5 COLS) -->
+                <div class="lg:col-span-5 space-y-6 lg:sticky lg:top-24">
+                    
+                    <div class="glass-panel p-5 rounded-2xl space-y-4">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-2">
+                                <span class="relative flex h-3 w-3">
+                                  <span id="live-indicator-ping" class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                                  <span id="live-indicator-dot" class="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
+                                </span>
+                                <span class="text-sm font-semibold text-slate-200" id="preview-title">Live Preview Window</span>
+                            </div>
+                            <span class="text-xs text-slate-400 font-mono bg-slate-900 border border-slate-800 px-2 py-0.5 rounded-md" id="preview-badge">READY</span>
+                        </div>
+
+                        <!-- VIDEO CANVAS & DISPLAY AREA -->
+                        <div class="relative w-full aspect-video rounded-xl overflow-hidden bg-slate-950 border border-slate-800 shadow-2xl flex items-center justify-center group" id="player-container">
+                            
+                            <!-- State 1: Default Video Loop Player -->
+                            <video id="main-video-player" class="w-full h-full object-cover" loop playsinline autoplay muted>
+                                <source src="https://assets.mixkit.co/videos/preview/mixkit-futuristic-city-with-flying-cars-and-lights-41551-large.mp4" type="video/mp4">
+                                Your browser does not support HTML5 video.
+                            </video>
+
+                            <!-- Custom Controls Overlay for Video Player -->
+                            <div id="video-controls-overlay" class="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-4">
+                                <!-- Progress Bar Slider -->
+                                <input type="range" id="video-seekbar" min="0" max="100" value="0" class="w-full mb-3 cursor-pointer">
+                                
+                                <div class="flex items-center justify-between text-xs text-slate-200">
+                                    <div class="flex items-center gap-3">
+                                        <button onclick="toggleVideoPlay()" id="play-pause-btn" class="hover:text-indigo-400 transition">
+                                            <i data-lucide="pause" class="w-5 h-5"></i>
+                                        </button>
+                                        <span id="video-time-display" class="font-mono text-slate-400">00:02 / 00:05</span>
+                                    </div>
+
+                                    <div class="flex items-center gap-3">
+                                        <button onclick="toggleVideoMute()" id="mute-btn" class="hover:text-indigo-400 transition">
+                                            <i data-lucide="volume-2" class="w-4 h-4"></i>
+                                        </button>
+                                        <button onclick="downloadActiveVideo()" class="hover:text-indigo-400 transition" title="Download HD Video">
+                                            <i data-lucide="download" class="w-4 h-4"></i>
+                                        </button>
+                                        <button onclick="toggleFullscreen()" class="hover:text-indigo-400 transition" title="Fullscreen">
+                                            <i data-lucide="maximize" class="w-4 h-4"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- State 2: Simulated Loading Overlay (Hidden initially) -->
+                            <div id="loading-overlay" class="absolute inset-0 bg-slate-950/95 backdrop-blur-md hidden flex-col items-center justify-center p-6 text-center space-y-4 z-20">
+                                <div class="relative flex items-center justify-center">
+                                    <div class="w-20 h-20 rounded-full border-2 border-indigo-500/20 border-t-indigo-500 animate-spin"></div>
+                                    <i data-lucide="sparkles" class="w-8 h-8 text-indigo-400 absolute"></i>
+                                </div>
+
+                                <div class="space-y-1">
+                                    <h4 class="text-base font-bold text-white" id="generation-status-text">Analyzing prompt...</h4>
+                                    <p class="text-xs text-slate-400" id="generation-subtext">Connecting to AI Neural Rendering Network</p>
+                                </div>
+
+                                <!-- Progress Bar -->
+                                <div class="w-full max-w-xs space-y-1">
+                                    <div class="w-full h-2 bg-slate-800 rounded-full overflow-hidden">
+                                        <div id="generation-progress-bar" class="h-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 w-0 transition-all duration-300"></div>
+                                    </div>
+                                    <div class="flex justify-between text-[10px] font-mono text-slate-500">
+                                        <span>PROCESSING</span>
+                                        <span id="generation-percentage">0%</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- Video Active Meta Info -->
+                        <div class="bg-slate-900/60 border border-slate-800/80 rounded-xl p-3.5 text-xs space-y-2">
+                            <div class="flex justify-between items-center text-slate-400">
+                                <span>Active Prompt:</span>
+                                <span class="text-indigo-400 font-mono text-[10px]" id="meta-style-tag">Style: Cinematic</span>
+                            </div>
+                            <p class="text-slate-300 italic line-clamp-2" id="active-prompt-display">
+                                "Futuristic cyberpunk metropolis bathed in neon rain, cinematic camera zooming into a glowing flying sports car, 8K ultra resolution"
+                            </p>
+                            <div class="pt-2 border-t border-slate-800/60 flex items-center justify-between text-slate-400 text-[11px]">
+                                <span>Resolution: <strong class="text-slate-200" id="meta-res font-normal">1080p</strong></span>
+                                <span>Ratio: <strong class="text-slate-200" id="meta-ratio">16:9</strong></span>
+                                <span>Length: <strong class="text-slate-200" id="meta-dur">5s</strong></span>
+                            </div>
+                        </div>
+
+                        <!-- Action Toolbar -->
+                        <div class="flex gap-2">
+                            <button onclick="downloadActiveVideo()" class="flex-1 py-2 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold flex items-center justify-center gap-2 transition">
+                                <i data-lucide="download" class="w-4 h-4"></i> Download
+                            </button>
+                            <button onclick="remixActiveVideo()" class="flex-1 py-2 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold flex items-center justify-center gap-2 transition">
+                                <i data-lucide="repeat" class="w-4 h-4"></i> Remix Prompt
+                            </button>
+                            <button onclick="shareVideo()" class="py-2 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold transition" title="Share Video">
+                                <i data-lucide="share-2" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- TAB 3: PROJECT LIBRARY VIEW -->
+        <div id="view-library" class="hidden space-y-6">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800/80 pb-5">
+                <div>
+                    <h2 class="text-xl font-bold text-white">Project Library</h2>
+                    <p class="text-xs text-slate-400">View and manage your previously generated AI video renders.</p>
+                </div>
+
+                <div class="flex items-center gap-3">
+                    <div class="relative">
+                        <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3 top-2.5"></i>
+                        <input type="text" placeholder="Search prompts..." class="bg-slate-900 border border-slate-800 text-xs rounded-xl pl-9 pr-4 py-2 text-slate-200 focus:outline-none focus:border-indigo-500 w-48 sm:w-64">
+                    </div>
+                    <select class="bg-slate-900 border border-slate-800 text-xs rounded-xl px-3 py-2 text-slate-300">
+                        <option>All Styles</option>
+                        <option>Cinematic</option>
+                        <option>3D Anime</option>
+                        <option>Cyberpunk</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Library Video Cards Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="library-grid">
+                
+                <!-- Card 1 -->
+                <div class="glass-panel rounded-2xl overflow-hidden group hover:border-indigo-500/50 transition">
+                    <div class="relative aspect-video bg-slate-950 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=600&q=80" alt="Thumbnail" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                        <div class="absolute inset-0 bg-slate-950/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center gap-2">
+                            <button onclick="loadLibraryItem('https://assets.mixkit.co/videos/preview/mixkit-futuristic-city-with-flying-cars-and-lights-41551-large.mp4', 'Futuristic Cyberpunk Metropolis with floating neon cars')" class="p-2.5 bg-indigo-600 text-white rounded-xl shadow-lg hover:scale-110 transition">
+                                <i data-lucide="play" class="w-4 h-4 fill-white"></i>
+                            </button>
+                        </div>
+                        <span class="absolute bottom-2 right-2 bg-slate-950/80 backdrop-blur-md text-slate-300 text-[10px] font-mono px-2 py-0.5 rounded">00:05</span>
+                    </div>
+                    <div class="p-4 space-y-3">
+                        <div class="flex items-center justify-between text-xs">
+                            <span class="px-2 py-0.5 rounded-full bg-indigo-500/10 text-indigo-400 font-medium border border-indigo-500/20">Cyberpunk</span>
+                            <span class="text-slate-500 text-[11px]">2 hours ago</span>
+                        </div>
+                        <p class="text-xs text-slate-300 line-clamp-2">Futuristic Cyberpunk Metropolis with floating neon cars and glowing rain reflections on skyscraper glass.</p>
+                        <div class="flex items-center justify-between pt-2 border-t border-slate-800/60">
+                            <span class="text-[10px] font-mono text-slate-400">1080p • 16:9</span>
+                            <div class="flex gap-2">
+                                <button onclick="showToast('Video link copied!')" class="text-slate-400 hover:text-white p-1"><i data-lucide="share-2" class="w-3.5 h-3.5"></i></button>
+                                <button onclick="deleteCard(this)" class="text-slate-400 hover:text-rose-400 p-1"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="glass-panel rounded-2xl overflow-hidden group hover:border-indigo-500/50 transition">
+                    <div class="relative aspect-video bg-slate-950 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=600&q=80" alt="Thumbnail" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                        <div class="absolute inset-0 bg-slate-950/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center gap-2">
+                            <button onclick="loadLibraryItem('https://assets.mixkit.co/videos/preview/mixkit-stars-in-space-background-1610-large.mp4', 'Cosmic nebula galaxy deep space exploration')" class="p-2.5 bg-indigo-600 text-white rounded-xl shadow-lg hover:scale-110 transition">
+                                <i data-lucide="play" class="w-4 h-4 fill-white"></i>
+                            </button>
+                        </div>
+                        <span class="absolute bottom-2 right-2 bg-slate-950/80 backdrop-blur-md text-slate-300 text-[10px] font-mono px-2 py-0.5 rounded">00:10</span>
+                    </div>
+                    <div class="p-4 space-y-3">
+                        <div class="flex items-center justify-between text-xs">
+                            <span class="px-2 py-0.5 rounded-full bg-purple-500/10 text-purple-400 font-medium border border-purple-500/20">Fantasy</span>
+                            <span class="text-slate-500 text-[11px]">1 day ago</span>
+                        </div>
+                        <p class="text-xs text-slate-300 line-clamp-2">Cosmic nebula galaxy deep space exploration, vibrant starlight dust particle acceleration.</p>
+                        <div class="flex items-center justify-between pt-2 border-t border-slate-800/60">
+                            <span class="text-[10px] font-mono text-slate-400">4K • 16:9</span>
+                            <div class="flex gap-2">
+                                <button onclick="showToast('Video link copied!')" class="text-slate-400 hover:text-white p-1"><i data-lucide="share-2" class="w-3.5 h-3.5"></i></button>
+                                <button onclick="deleteCard(this)" class="text-slate-400 hover:text-rose-400 p-1"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="glass-panel rounded-2xl overflow-hidden group hover:border-indigo-500/50 transition">
+                    <div class="relative aspect-video bg-slate-950 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=600&q=80" alt="Thumbnail" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                        <div class="absolute inset-0 bg-slate-950/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center gap-2">
+                            <button onclick="loadLibraryItem('https://assets.mixkit.co/videos/preview/mixkit-waves-in-the-water-1164-large.mp4', 'Serene oceanic drone sunset slow-motion waves')" class="p-2.5 bg-indigo-600 text-white rounded-xl shadow-lg hover:scale-110 transition">
+                                <i data-lucide="play" class="w-4 h-4 fill-white"></i>
+                            </button>
+                        </div>
+                        <span class="absolute bottom-2 right-2 bg-slate-950/80 backdrop-blur-md text-slate-300 text-[10px] font-mono px-2 py-0.5 rounded">00:05</span>
+                    </div>
+                    <div class="p-4 space-y-3">
+                        <div class="flex items-center justify-between text-xs">
+                            <span class="px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 font-medium border border-emerald-500/20">Photoreal</span>
+                            <span class="text-slate-500 text-[11px]">3 days ago</span>
+                        </div>
+                        <p class="text-xs text-slate-300 line-clamp-2">Serene oceanic drone sunset slow-motion waves crashing against golden hour beach cliffs.</p>
+                        <div class="flex items-center justify-between pt-2 border-t border-slate-800/60">
+                            <span class="text-[10px] font-mono text-slate-400">1080p • 16:9</span>
+                            <div class="flex gap-2">
+                                <button onclick="showToast('Video link copied!')" class="text-slate-400 hover:text-white p-1"><i data-lucide="share-2" class="w-3.5 h-3.5"></i></button>
+                                <button onclick="deleteCard(this)" class="text-slate-400 hover:text-rose-400 p-1"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- TAB 4: SETTINGS VIEW -->
+        <div id="view-settings" class="hidden max-w-3xl mx-auto space-y-6">
+            <div class="border-b border-slate-800/80 pb-5">
+                <h2 class="text-xl font-bold text-white">Account & Engine Settings</h2>
+                <p class="text-xs text-slate-400">Configure API keys, default rendering profiles, and notifications.</p>
+            </div>
+
+            <div class="glass-panel p-6 rounded-2xl space-y-6">
+                <!-- API Integration -->
+                <div class="space-y-3">
+                    <h3 class="text-sm font-semibold text-white flex items-center gap-2">
+                        <i data-lucide="key" class="w-4 h-4 text-indigo-400"></i> API Integrations
+                    </h3>
+                    <div class="space-y-2">
+                        <label class="text-xs text-slate-400">Custom OpenAI / Runway / Kling API Key</label>
+                        <input type="password" value="sk-proj-982374982374982374" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-slate-200 focus:outline-none focus:border-indigo-500">
+                    </div>
+                </div>
+
+                <div class="h-px bg-slate-800"></div>
+
+                <!-- Default Preferences -->
+                <div class="space-y-4">
+                    <h3 class="text-sm font-semibold text-white flex items-center gap-2">
+                        <i data-lucide="sliders" class="w-4 h-4 text-indigo-400"></i> Render Preferences
+                    </h3>
+                    
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-xs font-medium text-slate-200">Auto-enhance Prompts</p>
+                            <p class="text-[11px] text-slate-400">Automatically optimize prompts using GPT-4 for higher cinematic fidelity.</p>
+                        </div>
+                        <input type="checkbox" checked class="w-4 h-4 accent-indigo-600 rounded cursor-pointer">
+                    </div>
+
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-xs font-medium text-slate-200">Hardware Acceleration</p>
+                            <p class="text-[11px] text-slate-400">Use WebGL GPU acceleration for instant browser timeline playback.</p>
+                        </div>
+                        <input type="checkbox" checked class="w-4 h-4 accent-indigo-600 rounded cursor-pointer">
+                    </div>
+                </div>
+
+                <div class="pt-4">
+                    <button onclick="showToast('Settings saved successfully!')" class="py-2.5 px-6 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold shadow-md transition">
+                        Save Preferences
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="border-t border-slate-800/60 py-6 px-4 text-center text-xs text-slate-500">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
+            <p>© 2026 AI Video Studio. Powered by NextGen Generative AI Engine.</p>
+            <div class="flex items-center gap-6">
+                <a href="#" class="hover:text-slate-400 transition">Privacy Policy</a>
+                <a href="#" class="hover:text-slate-400 transition">API Documentation</a>
+                <a href="#" class="hover:text-slate-400 transition">System Status</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- TOAST NOTIFICATION CONTAINER -->
+    <div id="toast" class="fixed bottom-6 right-6 translate-y-20 opacity-0 bg-slate-900 border border-indigo-500/40 text-slate-100 text-xs px-4 py-3 rounded-xl shadow-2xl flex items-center gap-3 z-50 pointer-events-none">
+        <i data-lucide="check-circle" class="w-4 h-4 text-indigo-400"></i>
+        <span id="toast-message">Notification message</span>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // Global State Variables
+        let currentStyle = 'Cinematic';
+        let currentRatio = '16:9';
+        let currentDuration = '5s';
+        let activeVideoUrl = "https://assets.mixkit.co/videos/preview/mixkit-futuristic-city-with-flying-cars-and-lights-41551-large.mp4";
+        let activeTab = 'text-to-video';
+        let userCredits = 1240;
+
+        // Dynamic Sample Video URLs for generation results
+        const generatedSamples = [
+            "https://assets.mixkit.co/videos/preview/mixkit-futuristic-city-with-flying-cars-and-lights-41551-large.mp4",
+            "https://assets.mixkit.co/videos/preview/mixkit-stars-in-space-background-1610-large.mp4",
+            "https://assets.mixkit.co/videos/preview/mixkit-waves-in-the-water-1164-large.mp4",
+            "https://assets.mixkit.co/videos/preview/mixkit-abstract-laser-lights-background-41560-large.mp4"
+        ];
+
+        // Initialize icons on DOM load
+        document.addEventListener("DOMContentLoaded", () => {
+            lucide.createIcons();
+            setupPromptCharCounter();
+            setupVideoPlayerEvents();
+        });
+
+        // Tab Switching Logic
+        function switchTab(tabId) {
+            activeTab = tabId;
+            
+            // Hide all tab views
+            document.getElementById('view-generator').classList.add('hidden');
+            document.getElementById('view-library').classList.add('hidden');
+            document.getElementById('view-settings').classList.add('hidden');
+
+            // Reset tab button highlight styles
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.className = "tab-btn flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all text-slate-400 hover:text-white hover:bg-slate-800/60";
+            });
+
+            // Handle specific view activation
+            if (tabId === 'text-to-video' || tabId === 'image-to-video') {
+                document.getElementById('view-generator').classList.remove('hidden');
+                
+                const imageContainer = document.getElementById('image-upload-container');
+                if (tabId === 'image-to-video') {
+                    imageContainer.classList.remove('hidden');
+                } else {
+                    imageContainer.classList.add('hidden');
+                }
+
+                // Highlight active desktop tab
+                const activeDesktopTab = document.getElementById(`tab-${tabId}`);
+                if (activeDesktopTab) {
+                    activeDesktopTab.className = "tab-btn flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all text-white bg-indigo-600 shadow-md shadow-indigo-600/20";
+                }
+
+            } else if (tabId === 'library') {
+                document.getElementById('view-library').classList.remove('hidden');
+                document.getElementById('tab-library').className = "tab-btn flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all text-white bg-indigo-600 shadow-md shadow-indigo-600/20";
+            } else if (tabId === 'settings') {
+                document.getElementById('view-settings').classList.remove('hidden');
+                document.getElementById('tab-settings').className = "tab-btn flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all text-white bg-indigo-600 shadow-md shadow-indigo-600/20";
+            }
+        }
+
+        // Prompt Enhancers (Pills)
+        function addPillToPrompt(text) {
+            const promptArea = document.getElementById('prompt-input');
+            if (promptArea.value.trim() === "") {
+                promptArea.value = text;
+            } else {
+                promptArea.value += ", " + text;
+            }
+            updateCharCount();
+            showToast("Added tag to prompt");
+        }
+
+        function clearPrompt() {
+            document.getElementById('prompt-input').value = "";
+            updateCharCount();
+        }
+
+        function setupPromptCharCounter() {
+            const promptArea = document.getElementById('prompt-input');
+            promptArea.addEventListener('input', updateCharCount);
+        }
+
+        function updateCharCount() {
+            const count = document.getElementById('prompt-input').value.length;
+            document.getElementById('char-count').innerText = `${count} / 1000`;
+        }
+
+        // Style Selector
+        function selectStyle(styleName, element) {
+            currentStyle = styleName;
+            document.querySelectorAll('.style-card').forEach(card => card.classList.remove('selected'));
+            element.classList.add('selected');
+            document.getElementById('meta-style-tag').innerText = `Style: ${styleName}`;
+        }
+
+        // Ratio Selector
+        function setRatio(ratio, element) {
+            currentRatio = ratio;
+            document.querySelectorAll('.ratio-btn').forEach(btn => {
+                btn.className = "ratio-btn flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl bg-slate-900 border border-slate-800 hover:border-slate-700 text-slate-400 text-xs font-semibold";
+            });
+            element.className = "ratio-btn flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl bg-indigo-600/20 border border-indigo-500 text-indigo-300 text-xs font-semibold";
+            document.getElementById('meta-ratio').innerText = ratio;
+        }
+
+        // Duration Selector
+        function setDuration(duration, element) {
+            currentDuration = duration;
+            document.querySelectorAll('.duration-btn').forEach(btn => {
+                btn.className = "duration-btn py-2 px-3 rounded-xl bg-slate-900 border border-slate-800 hover:border-slate-700 text-slate-400 text-xs font-semibold";
+            });
+            element.className = "duration-btn py-2 px-3 rounded-xl bg-indigo-600/20 border border-indigo-500 text-indigo-300 text-xs font-semibold";
+            document.getElementById('meta-dur').innerText = duration;
+        }
+
+        // Image Drag & Drop / Upload Preview
+        function handleImageUpload(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    document.getElementById('preview-img').src = event.target.result;
+                    document.getElementById('upload-placeholder').classList.add('hidden');
+                    document.getElementById('upload-preview').classList.remove('hidden');
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function removeUploadedImage() {
+            document.getElementById('image-input').value = "";
+            document.getElementById('upload-placeholder').classList.remove('hidden');
+            document.getElementById('upload-preview').classList.add('hidden');
+        }
+
+        // SIMULATED VIDEO GENERATION PROCESS
+        function startVideoGeneration() {
+            const promptText = document.getElementById('prompt-input').value.trim();
+            if (!promptText) {
+                showToast("Please enter a prompt before generating.");
+                return;
+            }
+
+            if (userCredits < 30) {
+                showToast("Insufficient credits!");
+                return;
+            }
+
+            // Deduct Credits
+            userCredits -= 30;
+            document.getElementById('credit-count').innerText = userCredits.toLocaleString();
+
+            // UI Elements
+            const generateBtn = document.getElementById('generate-btn');
+            const loadingOverlay = document.getElementById('loading-overlay');
+            const progressBar = document.getElementById('generation-progress-bar');
+            const percentageText = document.getElementById('generation-percentage');
+            const statusText = document.getElementById('generation-status-text');
+            const subtext = document.getElementById('generation-subtext');
+
+            // Disable button & show loading state overlay
+            generateBtn.disabled = true;
+            generateBtn.classList.add('opacity-50', 'cursor-not-allowed');
+            loadingOverlay.classList.remove('hidden');
+            loadingOverlay.classList.add('flex');
+
+            // Update badge status
+            document.getElementById('preview-badge').innerText = "RENDERING";
+            document.getElementById('preview-badge').className = "text-xs font-mono bg-amber-500/20 text-amber-400 border border-amber-500/30 px-2 py-0.5 rounded-md";
+
+            // Multi-step progress simulation
+            const steps = [
+                { percent: 15, text: "Analyzing prompt & tokens...", sub: "Deconstructing visual semantic space" },
+                { percent: 40, text: "Generating initial keyframes...", sub: "Diffusion sampling process step 20/50" },
+                { percent: 75, text: "Interpolating motion frames...", sub: "Applying camera motion algorithms" },
+                { percent: 90, text: "Enhancing resolution...", sub: "Super-resolution & temporal smoothing" },
+                { percent: 100, text: "Finalizing MP4 stream...", sub: "Encoding audio/video channels" }
+            ];
+
+            let stepIndex = 0;
+            const interval = setInterval(() => {
+                if (stepIndex < steps.length) {
+                    const step = steps[stepIndex];
+                    progressBar.style.width = `${step.percent}%`;
+                    percentageText.innerText = `${step.percent}%`;
+                    statusText.innerText = step.text;
+                    subtext.innerText = step.sub;
+                    stepIndex++;
+                } else {
+                    clearInterval(interval);
+                    completeVideoGeneration(promptText);
+                }
+            }, 1200);
+        }
+
+        function completeVideoGeneration(promptText) {
+            const loadingOverlay = document.getElementById('loading-overlay');
+            const generateBtn = document.getElementById('generate-btn');
+            const videoPlayer = document.getElementById('main-video-player');
+
+            // Select random sample output
+            const randomSample = generatedSamples[Math.floor(Math.random() * generatedSamples.length)];
+            videoPlayer.src = randomSample;
+            videoPlayer.play();
+            activeVideoUrl = randomSample;
+
+            // Reset UI states
+            loadingOverlay.classList.add('hidden');
+            loadingOverlay.classList.remove('flex');
+            generateBtn.disabled = false;
+            generateBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+
+            document.getElementById('preview-badge').innerText = "LIVE";
+            document.getElementById('preview-badge').className = "text-xs font-mono bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded-md";
+
+            document.getElementById('active-prompt-display').innerText = `"${promptText}"`;
+
+            // Add generated video to Library dynamically
+            addToLibrary(promptText, randomSample);
+
+            showToast("Video generation completed!");
+        }
+
+        // Custom Video Player Controls
+        function setupVideoPlayerEvents() {
+            const video = document.getElementById('main-video-player');
+            const seekbar = document.getElementById('video-seekbar');
+            const timeDisplay = document.getElementById('video-time-display');
+
+            video.addEventListener('timeupdate', () => {
+                if (video.duration) {
+                    const value = (video.currentTime / video.duration) * 100;
+                    seekbar.value = value;
+                    timeDisplay.innerText = `${formatTime(video.currentTime)} / ${formatTime(video.duration)}`;
+                }
+            });
+
+            seekbar.addEventListener('input', () => {
+                if (video.duration) {
+                    video.currentTime = (seekbar.value / 100) * video.duration;
+                }
+            });
+        }
+
+        function formatTime(seconds) {
+            const mins = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        }
+
+        function toggleVideoPlay() {
+            const video = document.getElementById('main-video-player');
+            const btnIcon = document.getElementById('play-pause-btn');
+            if (video.paused) {
+                video.play();
+                btnIcon.innerHTML = `<i data-lucide="pause" class="w-5 h-5"></i>`;
+            } else {
+                video.pause();
+                btnIcon.innerHTML = `<i data-lucide="play" class="w-5 h-5"></i>`;
+            }
+            lucide.createIcons();
+        }
+
+        function toggleVideoMute() {
+            const video = document.getElementById('main-video-player');
+            const muteBtn = document.getElementById('mute-btn');
+            video.muted = !video.muted;
+            muteBtn.innerHTML = video.muted ? `<i data-lucide="volume-x" class="w-4 h-4"></i>` : `<i data-lucide="volume-2" class="w-4 h-4"></i>`;
+            lucide.createIcons();
+        }
+
+        function toggleFullscreen() {
+            const container = document.getElementById('player-container');
+            if (!document.fullscreenElement) {
+                container.requestFullscreen().catch(err => alert(`Fullscreen error: ${err.message}`));
+            } else {
+                document.exitFullscreen();
+            }
+        }
+
+        // Download Action
+        function downloadActiveVideo() {
+            showToast("Preparing download package...");
+            const a = document.createElement('a');
+            a.href = activeVideoUrl;
+            a.download = 'AI_Studio_Video.mp4';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
+
+        function remixActiveVideo() {
+            const promptText = document.getElementById('active-prompt-display').innerText.replace(/"/g, '');
+            document.getElementById('prompt-input').value = promptText;
+            updateCharCount();
+            switchTab('text-to-video');
+            showToast("Loaded prompt into editor");
+        }
+
+        function shareVideo() {
+            document.execCommand('copy');
+            showToast("Video URL copied to clipboard!");
+        }
+
+        // Library Management Dynamic Injection
+        function addToLibrary(promptText, videoUrl) {
+            const libraryGrid = document.getElementById('library-grid');
+            
+            const cardHTML = `
+                <div class="glass-panel rounded-2xl overflow-hidden group hover:border-indigo-500/50 transition">
+                    <div class="relative aspect-video bg-slate-950 overflow-hidden">
+                        <video class="w-full h-full object-cover" muted loop>
+                            <source src="${videoUrl}" type="video/mp4">
+                        </video>
+                        <div class="absolute inset-0 bg-slate-950/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center gap-2">
+                            <button onclick="loadLibraryItem('${videoUrl}', '${promptText}')" class="p-2.5 bg-indigo-600 text-white rounded-xl shadow-lg hover:scale-110 transition">
+                                <i data-lucide="play" class="w-4 h-4 fill-white"></i>
+                            </button>
+                        </div>
+                        <span class="absolute bottom-2 right-2 bg-slate-950/80 backdrop-blur-md text-slate-300 text-[10px] font-mono px-2 py-0.5 rounded">${currentDuration}</span>
+                    </div>
+                    <div class="p-4 space-y-3">
+                        <div class="flex items-center justify-between text-xs">
+                            <span class="px-2 py-0.5 rounded-full bg-indigo-500/10 text-indigo-400 font-medium border border-indigo-500/20">${currentStyle}</span>
+                            <span class="text-slate-500 text-[11px]">Just now</span>
+                        </div>
+                        <p class="text-xs text-slate-300 line-clamp-2">${promptText}</p>
+                        <div class="flex items-center justify-between pt-2 border-t border-slate-800/60">
+                            <span class="text-[10px] font-mono text-slate-400">1080p • ${currentRatio}</span>
+                            <div class="flex gap-2">
+                                <button onclick="showToast('Video link copied!')" class="text-slate-400 hover:text-white p-1"><i data-lucide="share-2" class="w-3.5 h-3.5"></i></button>
+                                <button onclick="deleteCard(this)" class="text-slate-400 hover:text-rose-400 p-1"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            libraryGrid.insertAdjacentHTML('afterbegin', cardHTML);
+            lucide.createIcons();
+        }
+
+        function loadLibraryItem(videoUrl, promptText) {
+            const videoPlayer = document.getElementById('main-video-player');
+            videoPlayer.src = videoUrl;
+            videoPlayer.play();
+            activeVideoUrl = videoUrl;
+            document.getElementById('active-prompt-display').innerText = `"${promptText}"`;
+            switchTab('text-to-video');
+            showToast("Loaded project into player");
+        }
+
+        function deleteCard(element) {
+            const card = element.closest('.glass-panel');
+            card.remove();
+            showToast("Project deleted from library");
+        }
+
+        // Toast Notification System
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toast-message');
+            toastMsg.innerText = message;
+            
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
+
+            setTimeout(() => {
+                toast.classList.remove('translate-y-0', 'opacity-100');
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
