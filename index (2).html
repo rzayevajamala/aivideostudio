@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="az" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Video Studio - Modern AI Video Generation Platform</title>
+    <title>AI Video Studio - Pulsuz Süni İntellekt Video Platforması</title>
 
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -95,23 +95,6 @@
             border-bottom: 1px solid rgba(255, 255, 255, 0.08);
         }
 
-        .neon-border-glow {
-            position: relative;
-        }
-        .neon-border-glow::before {
-            content: '';
-            position: absolute;
-            inset: -1px;
-            border-radius: inherit;
-            padding: 1px;
-            background: linear-gradient(135deg, #6366f1, #a855f7, #ec4899);
-            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-            -webkit-mask-composite: xor;
-            mask-composite: exclude;
-            pointer-events: none;
-            opacity: 0.7;
-        }
-
         /* Custom Range Slider */
         input[type=range] {
             -webkit-appearance: none;
@@ -174,7 +157,9 @@
                     <span class="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white via-slate-200 to-indigo-300 tracking-tight">
                         AI Video Studio
                     </span>
-                    <span class="hidden sm:inline-block ml-2 text-[10px] font-semibold px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 uppercase tracking-wider">v2.5 Pro</span>
+                    <span class="hidden sm:inline-block ml-2 text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 uppercase tracking-wider">
+                        100% PULSUZ
+                    </span>
                 </div>
             </div>
 
@@ -182,32 +167,31 @@
             <nav class="hidden md:flex items-center gap-1 bg-slate-900/80 p-1.5 rounded-2xl border border-slate-800/80">
                 <button onclick="switchTab('text-to-video')" id="tab-text-to-video" class="tab-btn flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all text-white bg-indigo-600 shadow-md shadow-indigo-600/20">
                     <i data-lucide="wand2" class="w-4 h-4"></i>
-                    Text-to-Video
+                    Mətndən Video
                 </button>
                 <button onclick="switchTab('image-to-video')" id="tab-image-to-video" class="tab-btn flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all text-slate-400 hover:text-white hover:bg-slate-800/60">
                     <i data-lucide="image" class="w-4 h-4"></i>
-                    Image-to-Video
+                    Şəkildən Video
                 </button>
                 <button onclick="switchTab('library')" id="tab-library" class="tab-btn flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all text-slate-400 hover:text-white hover:bg-slate-800/60">
                     <i data-lucide="folder-kanban" class="w-4 h-4"></i>
-                    Project Library
+                    Qalereyam (<span id="library-count">0</span>)
                 </button>
                 <button onclick="switchTab('settings')" id="tab-settings" class="tab-btn flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all text-slate-400 hover:text-white hover:bg-slate-800/60">
                     <i data-lucide="sliders" class="w-4 h-4"></i>
-                    Settings
+                    Tənzimləmələr
                 </button>
             </nav>
 
-            <!-- User Credits & Profile -->
+            <!-- Free Unlimited Access Badge -->
             <div class="flex items-center gap-3">
-                <div class="hidden sm:flex items-center gap-2 bg-indigo-950/40 border border-indigo-500/20 px-3.5 py-1.5 rounded-xl">
-                    <i data-lucide="zap" class="w-4 h-4 text-amber-400 fill-amber-400"></i>
-                    <span class="text-xs font-semibold text-slate-200"><span id="credit-count">1,240</span> Credits</span>
-                    <button onclick="showToast('Upgrade dialog opened')" class="text-[10px] bg-indigo-600 hover:bg-indigo-500 text-white font-bold px-2 py-0.5 rounded-md ml-1 transition">BUY</button>
+                <div class="flex items-center gap-2 bg-emerald-950/40 border border-emerald-500/30 px-3.5 py-1.5 rounded-xl">
+                    <i data-lucide="infinity" class="w-4 h-4 text-emerald-400"></i>
+                    <span class="text-xs font-semibold text-emerald-300">Limitsiz Hazırlama</span>
                 </div>
                 
-                <div class="h-9 w-9 rounded-xl bg-gradient-to-br from-slate-700 to-slate-800 border border-slate-700 flex items-center justify-center text-sm font-semibold cursor-pointer hover:border-indigo-500 transition">
-                    JD
+                <div class="h-9 w-9 rounded-xl bg-gradient-to-br from-indigo-700 to-purple-800 border border-indigo-500/40 flex items-center justify-center text-sm font-bold text-white shadow-md">
+                    AI
                 </div>
             </div>
         </div>
@@ -215,16 +199,16 @@
         <!-- Mobile Navigation Tabs Bar -->
         <div class="flex md:hidden items-center justify-around mt-3 pt-2 border-t border-slate-800/60 text-xs">
             <button onclick="switchTab('text-to-video')" class="mobile-tab-btn flex flex-col items-center gap-1 text-indigo-400 font-medium">
-                <i data-lucide="wand2" class="w-4 h-4"></i> Text
+                <i data-lucide="wand2" class="w-4 h-4"></i> Mətn
             </button>
             <button onclick="switchTab('image-to-video')" class="mobile-tab-btn flex flex-col items-center gap-1 text-slate-400 hover:text-white">
-                <i data-lucide="image" class="w-4 h-4"></i> Image
+                <i data-lucide="image" class="w-4 h-4"></i> Şəkil
             </button>
             <button onclick="switchTab('library')" class="mobile-tab-btn flex flex-col items-center gap-1 text-slate-400 hover:text-white">
-                <i data-lucide="folder-kanban" class="w-4 h-4"></i> Library
+                <i data-lucide="folder-kanban" class="w-4 h-4"></i> Qalereya
             </button>
             <button onclick="switchTab('settings')" class="mobile-tab-btn flex flex-col items-center gap-1 text-slate-400 hover:text-white">
-                <i data-lucide="sliders" class="w-4 h-4"></i> Settings
+                <i data-lucide="sliders" class="w-4 h-4"></i> Tənzimlər
             </button>
         </div>
     </header>
@@ -232,9 +216,23 @@
     <!-- MAIN BODY CONTENT -->
     <main class="max-w-7xl mx-auto px-4 lg:px-8 py-6 w-full flex-grow">
 
-        <!-- TAB 1 & 2: GENERATOR VIEW (Text-to-Video & Image-to-Video) -->
+        <!-- TAB 1 & 2: GENERATOR VIEW (Mətndən Video & Şəkildən Video) -->
         <div id="view-generator" class="space-y-8">
             
+            <!-- Banner Message -->
+            <div class="glass-panel p-4 rounded-2xl border border-indigo-500/30 bg-gradient-to-r from-indigo-950/40 via-purple-950/20 to-slate-900 flex flex-col sm:flex-row items-center justify-between gap-3">
+                <div class="flex items-center gap-3">
+                    <div class="p-2 rounded-xl bg-indigo-600/20 border border-indigo-500/30 text-indigo-400">
+                        <i data-lucide="gift" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-sm font-bold text-white">Tam Ödənişsiz & Limitsiz AI Video Generation</h3>
+                        <p class="text-xs text-slate-400">Heç bir kredit, abunəlik və ya ödəniş tələb olunmur. İstədiyiniz qədər video yaradın!</p>
+                    </div>
+                </div>
+                <span class="text-xs font-semibold px-3 py-1 rounded-lg bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 whitespace-nowrap">0 AZN / 0 Kredit</span>
+            </div>
+
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
                 
                 <!-- LEFT COLUMN: PROMPT & CONTROLS (7 COLS) -->
@@ -248,8 +246,8 @@
                                 <div class="w-12 h-12 rounded-full bg-indigo-500/10 text-indigo-400 flex items-center justify-center mx-auto group-hover:scale-110 transition">
                                     <i data-lucide="upload-cloud" class="w-6 h-6"></i>
                                 </div>
-                                <p class="text-sm font-semibold text-slate-200">Upload Source Image / Keyframe</p>
-                                <p class="text-xs text-slate-400">PNG, JPG, WEBP up to 20MB. Drag & drop supported.</p>
+                                <p class="text-sm font-semibold text-slate-200">Əsas Şəkli Yükləyin (Keyframe)</p>
+                                <p class="text-xs text-slate-400">PNG, JPG, WEBP dəstəklənir. Şəkli bura sürüşdürüb buraxın.</p>
                             </div>
                             <div id="upload-preview" class="hidden relative rounded-xl overflow-hidden max-h-48">
                                 <img id="preview-img" src="" alt="Source preview" class="w-full h-full object-cover">
@@ -265,10 +263,10 @@
                         <div class="flex items-center justify-between">
                             <label class="text-sm font-semibold text-slate-200 flex items-center gap-2">
                                 <i data-lucide="sparkles" class="w-4 h-4 text-indigo-400"></i>
-                                Video Prompt
+                                Video Mətni (Prompt)
                             </label>
                             <button onclick="clearPrompt()" class="text-xs text-slate-400 hover:text-slate-200 flex items-center gap-1 transition">
-                                <i data-lucide="rotate-ccw" class="w-3 h-3"></i> Clear
+                                <i data-lucide="rotate-ccw" class="w-3 h-3"></i> Təmizlə
                             </button>
                         </div>
 
@@ -276,25 +274,25 @@
                         <div class="relative">
                             <textarea id="prompt-input" rows="4" 
                                 class="w-full bg-slate-950/70 border border-slate-800 rounded-xl p-4 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition resize-none"
-                                placeholder="Describe the scene in rich detail... e.g., Futuristic cyberpunk metropolis bathed in neon rain, cinematic camera zooming into a glowing flying sports car, 8K ultra resolution, dramatic lighting..."></textarea>
+                                placeholder="Səhnəni ətraflı təsvir edin... Məsələn: Gecə vaxtı neon işıqlarla bəzədilmiş kiberpank şəhərdə uçan idman maşını, kinematik kamera zoom-u, 8K keyfiyyət, dramatik işıqlandırma..."></textarea>
                             <div class="absolute bottom-3 right-3 text-xs text-slate-500 font-mono" id="char-count">0 / 1000</div>
                         </div>
 
                         <!-- Prompt Suggestion Pills -->
                         <div class="space-y-2">
-                            <div class="text-xs font-medium text-slate-400">Quick Prompt Enhancers:</div>
+                            <div class="text-xs font-medium text-slate-400">Sürətli Prompt Sözləri:</div>
                             <div class="flex flex-wrap gap-2">
-                                <button onclick="addPillToPrompt('cinematic lighting, 8k resolution')" class="text-xs bg-slate-800/80 hover:bg-indigo-600/20 hover:border-indigo-500/50 border border-slate-700/60 text-slate-300 px-2.5 py-1 rounded-lg transition flex items-center gap-1.5">
-                                    <i data-lucide="plus" class="w-3 h-3 text-indigo-400"></i> Cinematic Lighting
+                                <button onclick="addPillToPrompt('kinematik işıqlandırma, 8k Ultra HD')" class="text-xs bg-slate-800/80 hover:bg-indigo-600/20 hover:border-indigo-500/50 border border-slate-700/60 text-slate-300 px-2.5 py-1 rounded-lg transition flex items-center gap-1.5">
+                                    <i data-lucide="plus" class="w-3 h-3 text-indigo-400"></i> Kinematik İşıq
                                 </button>
-                                <button onclick="addPillToPrompt('slow motion, fluid movement')" class="text-xs bg-slate-800/80 hover:bg-indigo-600/20 hover:border-indigo-500/50 border border-slate-700/60 text-slate-300 px-2.5 py-1 rounded-lg transition flex items-center gap-1.5">
+                                <button onclick="addPillToPrompt('ağır çəkiliş (slow motion), rəvan hərəkət')" class="text-xs bg-slate-800/80 hover:bg-indigo-600/20 hover:border-indigo-500/50 border border-slate-700/60 text-slate-300 px-2.5 py-1 rounded-lg transition flex items-center gap-1.5">
                                     <i data-lucide="plus" class="w-3 h-3 text-indigo-400"></i> Slow Motion
                                 </button>
-                                <button onclick="addPillToPrompt('photorealistic, Unreal Engine 5 render')" class="text-xs bg-slate-800/80 hover:bg-indigo-600/20 hover:border-indigo-500/50 border border-slate-700/60 text-slate-300 px-2.5 py-1 rounded-lg transition flex items-center gap-1.5">
-                                    <i data-lucide="plus" class="w-3 h-3 text-indigo-400"></i> Hyper-realistic
+                                <button onclick="addPillToPrompt('fotorealistik, Unreal Engine 5 render')" class="text-xs bg-slate-800/80 hover:bg-indigo-600/20 hover:border-indigo-500/50 border border-slate-700/60 text-slate-300 px-2.5 py-1 rounded-lg transition flex items-center gap-1.5">
+                                    <i data-lucide="plus" class="w-3 h-3 text-indigo-400"></i> Fotorealistik
                                 </button>
-                                <button onclick="addPillToPrompt('volumetric fog, vibrant neon glow')" class="text-xs bg-slate-800/80 hover:bg-indigo-600/20 hover:border-indigo-500/50 border border-slate-700/60 text-slate-300 px-2.5 py-1 rounded-lg transition flex items-center gap-1.5">
-                                    <i data-lucide="plus" class="w-3 h-3 text-indigo-400"></i> Neon Glow
+                                <button onclick="addPillToPrompt('həcmli duman, parlaq neon parıltısı')" class="text-xs bg-slate-800/80 hover:bg-indigo-600/20 hover:border-indigo-500/50 border border-slate-700/60 text-slate-300 px-2.5 py-1 rounded-lg transition flex items-center gap-1.5">
+                                    <i data-lucide="plus" class="w-3 h-3 text-indigo-400"></i> Neon Dumanı
                                 </button>
                             </div>
                         </div>
@@ -304,17 +302,17 @@
                     <div class="glass-panel p-5 rounded-2xl space-y-3">
                         <label class="text-sm font-semibold text-slate-200 flex items-center gap-2">
                             <i data-lucide="palette" class="w-4 h-4 text-indigo-400"></i>
-                            Visual Style
+                            Vizual Üslub (Style)
                         </label>
                         
                         <div class="grid grid-cols-2 sm:grid-cols-5 gap-3" id="style-selector">
                             
                             <!-- Style Card 1 -->
-                            <div onclick="selectStyle('Cinematic', this)" class="style-card selected relative rounded-xl border border-slate-800 bg-slate-900/60 p-2.5 text-center cursor-pointer transition hover:border-slate-600 group">
+                            <div onclick="selectStyle('Kinematik', this)" class="style-card selected relative rounded-xl border border-slate-800 bg-slate-900/60 p-2.5 text-center cursor-pointer transition hover:border-slate-600 group">
                                 <div class="h-16 rounded-lg bg-gradient-to-tr from-amber-900/40 via-slate-900 to-indigo-950 mb-2 overflow-hidden relative flex items-center justify-center">
                                     <i data-lucide="film" class="w-6 h-6 text-amber-400 group-hover:scale-110 transition"></i>
                                 </div>
-                                <span class="text-xs font-medium block text-slate-200">Cinematic</span>
+                                <span class="text-xs font-medium block text-slate-200">Kinematik</span>
                                 <div class="check-icon opacity-100 transition absolute top-2 right-2 bg-indigo-600 rounded-full p-0.5">
                                     <i data-lucide="check" class="w-3 h-3 text-white"></i>
                                 </div>
@@ -332,11 +330,11 @@
                             </div>
 
                             <!-- Style Card 3 -->
-                            <div onclick="selectStyle('Photorealistic', this)" class="style-card relative rounded-xl border border-slate-800 bg-slate-900/60 p-2.5 text-center cursor-pointer transition hover:border-slate-600 group">
+                            <div onclick="selectStyle('Fotorealizm', this)" class="style-card relative rounded-xl border border-slate-800 bg-slate-900/60 p-2.5 text-center cursor-pointer transition hover:border-slate-600 group">
                                 <div class="h-16 rounded-lg bg-gradient-to-tr from-emerald-900/40 via-slate-900 to-teal-950 mb-2 overflow-hidden relative flex items-center justify-center">
                                     <i data-lucide="camera" class="w-6 h-6 text-emerald-400 group-hover:scale-110 transition"></i>
                                 </div>
-                                <span class="text-xs font-medium block text-slate-200">Photoreal</span>
+                                <span class="text-xs font-medium block text-slate-200">Fotorealizm</span>
                                 <div class="check-icon opacity-0 transition absolute top-2 right-2 bg-indigo-600 rounded-full p-0.5">
                                     <i data-lucide="check" class="w-3 h-3 text-white"></i>
                                 </div>
@@ -354,11 +352,11 @@
                             </div>
 
                             <!-- Style Card 5 -->
-                            <div onclick="selectStyle('Fantasy', this)" class="style-card relative rounded-xl border border-slate-800 bg-slate-900/60 p-2.5 text-center cursor-pointer transition hover:border-slate-600 group">
+                            <div onclick="selectStyle('Fantezi', this)" class="style-card relative rounded-xl border border-slate-800 bg-slate-900/60 p-2.5 text-center cursor-pointer transition hover:border-slate-600 group">
                                 <div class="h-16 rounded-lg bg-gradient-to-tr from-purple-900/40 via-slate-900 to-fuchsia-950 mb-2 overflow-hidden relative flex items-center justify-center">
                                     <i data-lucide="wand" class="w-6 h-6 text-purple-400 group-hover:scale-110 transition"></i>
                                 </div>
-                                <span class="text-xs font-medium block text-slate-200">Fantasy</span>
+                                <span class="text-xs font-medium block text-slate-200">Fantezi</span>
                                 <div class="check-icon opacity-0 transition absolute top-2 right-2 bg-indigo-600 rounded-full p-0.5">
                                     <i data-lucide="check" class="w-3 h-3 text-white"></i>
                                 </div>
@@ -371,14 +369,14 @@
                     <div class="glass-panel p-5 rounded-2xl space-y-5">
                         <label class="text-sm font-semibold text-slate-200 flex items-center gap-2">
                             <i data-lucide="settings-2" class="w-4 h-4 text-indigo-400"></i>
-                            Generation Parameters
+                            Video Parametrləri
                         </label>
 
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
                             
                             <!-- Aspect Ratio Selector -->
                             <div class="space-y-2">
-                                <label class="text-xs text-slate-400 font-medium">Aspect Ratio</label>
+                                <label class="text-xs text-slate-400 font-medium">Ölçü Nisbəti (Aspect Ratio)</label>
                                 <div class="grid grid-cols-3 gap-2" id="aspect-ratio-group">
                                     <button onclick="setRatio('16:9', this)" class="ratio-btn flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl bg-indigo-600/20 border border-indigo-500 text-indigo-300 text-xs font-semibold">
                                         <i data-lucide="monitor" class="w-3.5 h-3.5"></i> 16:9
@@ -394,49 +392,49 @@
 
                             <!-- Duration Selector -->
                             <div class="space-y-2">
-                                <label class="text-xs text-slate-400 font-medium">Video Duration</label>
+                                <label class="text-xs text-slate-400 font-medium">Video Müddəti</label>
                                 <div class="grid grid-cols-3 gap-2" id="duration-group">
                                     <button onclick="setDuration('5s', this)" class="duration-btn py-2 px-3 rounded-xl bg-indigo-600/20 border border-indigo-500 text-indigo-300 text-xs font-semibold">
-                                        5 sec
+                                        5 san
                                     </button>
                                     <button onclick="setDuration('10s', this)" class="duration-btn py-2 px-3 rounded-xl bg-slate-900 border border-slate-800 hover:border-slate-700 text-slate-400 text-xs font-semibold">
-                                        10 sec
+                                        10 san
                                     </button>
                                     <button onclick="setDuration('15s', this)" class="duration-btn py-2 px-3 rounded-xl bg-slate-900 border border-slate-800 hover:border-slate-700 text-slate-400 text-xs font-semibold">
-                                        15 sec
+                                        15 san
                                     </button>
                                 </div>
                             </div>
 
                             <!-- Camera Motion -->
                             <div class="space-y-2">
-                                <label class="text-xs text-slate-400 font-medium">Camera Motion</label>
+                                <label class="text-xs text-slate-400 font-medium">Kamera Hərəkəti</label>
                                 <select id="camera-motion-select" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-indigo-500">
-                                    <option value="Pan Right & Zoom In">Pan Right & Zoom In</option>
-                                    <option value="Slow Zoom Out">Slow Zoom Out</option>
-                                    <option value="Tilt Up Dynamic">Tilt Up Dynamic</option>
-                                    <option value="Static Drone Overhead">Static Drone Overhead</option>
+                                    <option value="Pan Sağa & Zoom">Sağa Dönüş & Yaxınlaşdırma</option>
+                                    <option value="Yavaş Uzaqlaşma">Yavaş Uzaqlaşma (Zoom Out)</option>
+                                    <option value="Dinamik Yuxarı İzləmə">Dinamik Yuxarı Çəkiliş</option>
+                                    <option value="Dron Üstdən Çəkiliş">Dron Üstdən Çəkiliş</option>
                                 </select>
                             </div>
 
                             <!-- Resolution Selector -->
                             <div class="space-y-2">
-                                <label class="text-xs text-slate-400 font-medium">Quality Output</label>
+                                <label class="text-xs text-slate-400 font-medium">Video Keyfiyyəti</label>
                                 <select id="resolution-select" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-indigo-500">
-                                    <option value="720p">720p (Fastest)</option>
-                                    <option value="1080p" selected>1080p Full HD (Recommended)</option>
-                                    <option value="4K">4K Ultra HD (Pro)</option>
+                                    <option value="720p">720p (Sürətli)</option>
+                                    <option value="1080p" selected>1080p Full HD (Məsləhətdir)</option>
+                                    <option value="4K">4K Ultra HD (Maksimum)</option>
                                 </select>
                             </div>
 
                         </div>
                     </div>
 
-                    <!-- GENERATE BUTTON -->
+                    <!-- GENERATE BUTTON (PULSUZ / NO CREDITS) -->
                     <div>
                         <button id="generate-btn" onclick="startVideoGeneration()" class="w-full py-4 px-6 rounded-2xl bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 hover:from-indigo-500 hover:to-pink-500 text-white font-bold text-base shadow-xl shadow-indigo-600/30 transition transform active:scale-[0.99] flex items-center justify-center gap-3">
                             <i data-lucide="sparkles" class="w-5 h-5 fill-white"></i>
-                            <span>Generate Video (30 Credits)</span>
+                            <span>Saniyələr İçində Video Yarat (PULSUZ)</span>
                         </button>
                     </div>
 
@@ -452,9 +450,9 @@
                                   <span id="live-indicator-ping" class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                                   <span id="live-indicator-dot" class="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
                                 </span>
-                                <span class="text-sm font-semibold text-slate-200" id="preview-title">Live Preview Window</span>
+                                <span class="text-sm font-semibold text-slate-200" id="preview-title">Canlı Əks-etdirmə Window-su</span>
                             </div>
-                            <span class="text-xs text-slate-400 font-mono bg-slate-900 border border-slate-800 px-2 py-0.5 rounded-md" id="preview-badge">READY</span>
+                            <span class="text-xs text-slate-400 font-mono bg-slate-900 border border-slate-800 px-2 py-0.5 rounded-md" id="preview-badge">HAZIRDIR</span>
                         </div>
 
                         <!-- VIDEO CANVAS & DISPLAY AREA -->
@@ -463,7 +461,7 @@
                             <!-- State 1: Default Video Loop Player -->
                             <video id="main-video-player" class="w-full h-full object-cover" loop playsinline autoplay muted>
                                 <source src="https://assets.mixkit.co/videos/preview/mixkit-futuristic-city-with-flying-cars-and-lights-41551-large.mp4" type="video/mp4">
-                                Your browser does not support HTML5 video.
+                                Brauzeriniz HTML5 videonu dəstəkləmir.
                             </video>
 
                             <!-- Custom Controls Overlay for Video Player -->
@@ -483,10 +481,10 @@
                                         <button onclick="toggleVideoMute()" id="mute-btn" class="hover:text-indigo-400 transition">
                                             <i data-lucide="volume-2" class="w-4 h-4"></i>
                                         </button>
-                                        <button onclick="downloadActiveVideo()" class="hover:text-indigo-400 transition" title="Download HD Video">
+                                        <button onclick="downloadActiveVideo()" class="hover:text-indigo-400 transition" title="Yüklə">
                                             <i data-lucide="download" class="w-4 h-4"></i>
                                         </button>
-                                        <button onclick="toggleFullscreen()" class="hover:text-indigo-400 transition" title="Fullscreen">
+                                        <button onclick="toggleFullscreen()" class="hover:text-indigo-400 transition" title="Tam Ekran">
                                             <i data-lucide="maximize" class="w-4 h-4"></i>
                                         </button>
                                     </div>
@@ -501,8 +499,8 @@
                                 </div>
 
                                 <div class="space-y-1">
-                                    <h4 class="text-base font-bold text-white" id="generation-status-text">Analyzing prompt...</h4>
-                                    <p class="text-xs text-slate-400" id="generation-subtext">Connecting to AI Neural Rendering Network</p>
+                                    <h4 class="text-base font-bold text-white" id="generation-status-text">Prompt təhlil edilir...</h4>
+                                    <p class="text-xs text-slate-400" id="generation-subtext">Neyron Şəbəkə Render Şəbəkəsinə Qoşulur</p>
                                 </div>
 
                                 <!-- Progress Bar -->
@@ -511,7 +509,7 @@
                                         <div id="generation-progress-bar" class="h-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 w-0 transition-all duration-300"></div>
                                     </div>
                                     <div class="flex justify-between text-[10px] font-mono text-slate-500">
-                                        <span>PROCESSING</span>
+                                        <span>EMAL EDİLİR</span>
                                         <span id="generation-percentage">0%</span>
                                     </div>
                                 </div>
@@ -522,28 +520,28 @@
                         <!-- Video Active Meta Info -->
                         <div class="bg-slate-900/60 border border-slate-800/80 rounded-xl p-3.5 text-xs space-y-2">
                             <div class="flex justify-between items-center text-slate-400">
-                                <span>Active Prompt:</span>
-                                <span class="text-indigo-400 font-mono text-[10px]" id="meta-style-tag">Style: Cinematic</span>
+                                <span>Aktiv Prompt:</span>
+                                <span class="text-indigo-400 font-mono text-[10px]" id="meta-style-tag">Üslub: Kinematik</span>
                             </div>
                             <p class="text-slate-300 italic line-clamp-2" id="active-prompt-display">
-                                "Futuristic cyberpunk metropolis bathed in neon rain, cinematic camera zooming into a glowing flying sports car, 8K ultra resolution"
+                                "Gecə vaxtı neon işıqlarla bəzədilmiş kiberpank şəhərdə uçan idman maşını, kinematik kamera zoom-u, 8K keyfiyyət"
                             </p>
                             <div class="pt-2 border-t border-slate-800/60 flex items-center justify-between text-slate-400 text-[11px]">
-                                <span>Resolution: <strong class="text-slate-200" id="meta-res font-normal">1080p</strong></span>
-                                <span>Ratio: <strong class="text-slate-200" id="meta-ratio">16:9</strong></span>
-                                <span>Length: <strong class="text-slate-200" id="meta-dur">5s</strong></span>
+                                <span>Keyfiyyət: <strong class="text-slate-200" id="meta-res">1080p</strong></span>
+                                <span>Nisbət: <strong class="text-slate-200" id="meta-ratio">16:9</strong></span>
+                                <span>Müddət: <strong class="text-slate-200" id="meta-dur">5s</strong></span>
                             </div>
                         </div>
 
                         <!-- Action Toolbar -->
                         <div class="flex gap-2">
                             <button onclick="downloadActiveVideo()" class="flex-1 py-2 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold flex items-center justify-center gap-2 transition">
-                                <i data-lucide="download" class="w-4 h-4"></i> Download
+                                <i data-lucide="download" class="w-4 h-4"></i> Video Yüklə
                             </button>
                             <button onclick="remixActiveVideo()" class="flex-1 py-2 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold flex items-center justify-center gap-2 transition">
-                                <i data-lucide="repeat" class="w-4 h-4"></i> Remix Prompt
+                                <i data-lucide="repeat" class="w-4 h-4"></i> Yenidən İşlə
                             </button>
-                            <button onclick="shareVideo()" class="py-2 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold transition" title="Share Video">
+                            <button onclick="shareVideo()" class="py-2 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold transition" title="Paylaş">
                                 <i data-lucide="share-2" class="w-4 h-4"></i>
                             </button>
                         </div>
@@ -560,158 +558,88 @@
         <div id="view-library" class="hidden space-y-6">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800/80 pb-5">
                 <div>
-                    <h2 class="text-xl font-bold text-white">Project Library</h2>
-                    <p class="text-xs text-slate-400">View and manage your previously generated AI video renders.</p>
+                    <h2 class="text-xl font-bold text-white">Yaradılmış Videolar Qalereyası</h2>
+                    <p class="text-xs text-slate-400">Əvvəlcə hazırladığınız süni intellekt videolarının siyahısı (Avtomatik Yaddaşda Saxlanılır).</p>
                 </div>
 
                 <div class="flex items-center gap-3">
-                    <div class="relative">
-                        <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3 top-2.5"></i>
-                        <input type="text" placeholder="Search prompts..." class="bg-slate-900 border border-slate-800 text-xs rounded-xl pl-9 pr-4 py-2 text-slate-200 focus:outline-none focus:border-indigo-500 w-48 sm:w-64">
-                    </div>
-                    <select class="bg-slate-900 border border-slate-800 text-xs rounded-xl px-3 py-2 text-slate-300">
-                        <option>All Styles</option>
-                        <option>Cinematic</option>
-                        <option>3D Anime</option>
-                        <option>Cyberpunk</option>
-                    </select>
+                    <button onclick="clearAllLibrary()" class="text-xs bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/30 px-3 py-2 rounded-xl transition flex items-center gap-1.5">
+                        <i data-lucide="trash-2" class="w-3.5 h-3.5"></i> Hamısını Təmizlə
+                    </button>
                 </div>
             </div>
 
             <!-- Library Video Cards Grid -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="library-grid">
-                
-                <!-- Card 1 -->
-                <div class="glass-panel rounded-2xl overflow-hidden group hover:border-indigo-500/50 transition">
-                    <div class="relative aspect-video bg-slate-950 overflow-hidden">
-                        <img src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=600&q=80" alt="Thumbnail" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
-                        <div class="absolute inset-0 bg-slate-950/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center gap-2">
-                            <button onclick="loadLibraryItem('https://assets.mixkit.co/videos/preview/mixkit-futuristic-city-with-flying-cars-and-lights-41551-large.mp4', 'Futuristic Cyberpunk Metropolis with floating neon cars')" class="p-2.5 bg-indigo-600 text-white rounded-xl shadow-lg hover:scale-110 transition">
-                                <i data-lucide="play" class="w-4 h-4 fill-white"></i>
-                            </button>
-                        </div>
-                        <span class="absolute bottom-2 right-2 bg-slate-950/80 backdrop-blur-md text-slate-300 text-[10px] font-mono px-2 py-0.5 rounded">00:05</span>
-                    </div>
-                    <div class="p-4 space-y-3">
-                        <div class="flex items-center justify-between text-xs">
-                            <span class="px-2 py-0.5 rounded-full bg-indigo-500/10 text-indigo-400 font-medium border border-indigo-500/20">Cyberpunk</span>
-                            <span class="text-slate-500 text-[11px]">2 hours ago</span>
-                        </div>
-                        <p class="text-xs text-slate-300 line-clamp-2">Futuristic Cyberpunk Metropolis with floating neon cars and glowing rain reflections on skyscraper glass.</p>
-                        <div class="flex items-center justify-between pt-2 border-t border-slate-800/60">
-                            <span class="text-[10px] font-mono text-slate-400">1080p • 16:9</span>
-                            <div class="flex gap-2">
-                                <button onclick="showToast('Video link copied!')" class="text-slate-400 hover:text-white p-1"><i data-lucide="share-2" class="w-3.5 h-3.5"></i></button>
-                                <button onclick="deleteCard(this)" class="text-slate-400 hover:text-rose-400 p-1"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
-                            </div>
-                        </div>
-                    </div>
+                <!-- Dynamically populated from localStorage -->
+            </div>
+            
+            <div id="empty-library-msg" class="hidden text-center py-12 space-y-3">
+                <div class="w-16 h-16 rounded-full bg-slate-800 flex items-center justify-center mx-auto text-slate-500">
+                    <i data-lucide="video-off" class="w-8 h-8"></i>
                 </div>
-
-                <!-- Card 2 -->
-                <div class="glass-panel rounded-2xl overflow-hidden group hover:border-indigo-500/50 transition">
-                    <div class="relative aspect-video bg-slate-950 overflow-hidden">
-                        <img src="https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=600&q=80" alt="Thumbnail" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
-                        <div class="absolute inset-0 bg-slate-950/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center gap-2">
-                            <button onclick="loadLibraryItem('https://assets.mixkit.co/videos/preview/mixkit-stars-in-space-background-1610-large.mp4', 'Cosmic nebula galaxy deep space exploration')" class="p-2.5 bg-indigo-600 text-white rounded-xl shadow-lg hover:scale-110 transition">
-                                <i data-lucide="play" class="w-4 h-4 fill-white"></i>
-                            </button>
-                        </div>
-                        <span class="absolute bottom-2 right-2 bg-slate-950/80 backdrop-blur-md text-slate-300 text-[10px] font-mono px-2 py-0.5 rounded">00:10</span>
-                    </div>
-                    <div class="p-4 space-y-3">
-                        <div class="flex items-center justify-between text-xs">
-                            <span class="px-2 py-0.5 rounded-full bg-purple-500/10 text-purple-400 font-medium border border-purple-500/20">Fantasy</span>
-                            <span class="text-slate-500 text-[11px]">1 day ago</span>
-                        </div>
-                        <p class="text-xs text-slate-300 line-clamp-2">Cosmic nebula galaxy deep space exploration, vibrant starlight dust particle acceleration.</p>
-                        <div class="flex items-center justify-between pt-2 border-t border-slate-800/60">
-                            <span class="text-[10px] font-mono text-slate-400">4K • 16:9</span>
-                            <div class="flex gap-2">
-                                <button onclick="showToast('Video link copied!')" class="text-slate-400 hover:text-white p-1"><i data-lucide="share-2" class="w-3.5 h-3.5"></i></button>
-                                <button onclick="deleteCard(this)" class="text-slate-400 hover:text-rose-400 p-1"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Card 3 -->
-                <div class="glass-panel rounded-2xl overflow-hidden group hover:border-indigo-500/50 transition">
-                    <div class="relative aspect-video bg-slate-950 overflow-hidden">
-                        <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=600&q=80" alt="Thumbnail" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
-                        <div class="absolute inset-0 bg-slate-950/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center gap-2">
-                            <button onclick="loadLibraryItem('https://assets.mixkit.co/videos/preview/mixkit-waves-in-the-water-1164-large.mp4', 'Serene oceanic drone sunset slow-motion waves')" class="p-2.5 bg-indigo-600 text-white rounded-xl shadow-lg hover:scale-110 transition">
-                                <i data-lucide="play" class="w-4 h-4 fill-white"></i>
-                            </button>
-                        </div>
-                        <span class="absolute bottom-2 right-2 bg-slate-950/80 backdrop-blur-md text-slate-300 text-[10px] font-mono px-2 py-0.5 rounded">00:05</span>
-                    </div>
-                    <div class="p-4 space-y-3">
-                        <div class="flex items-center justify-between text-xs">
-                            <span class="px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 font-medium border border-emerald-500/20">Photoreal</span>
-                            <span class="text-slate-500 text-[11px]">3 days ago</span>
-                        </div>
-                        <p class="text-xs text-slate-300 line-clamp-2">Serene oceanic drone sunset slow-motion waves crashing against golden hour beach cliffs.</p>
-                        <div class="flex items-center justify-between pt-2 border-t border-slate-800/60">
-                            <span class="text-[10px] font-mono text-slate-400">1080p • 16:9</span>
-                            <div class="flex gap-2">
-                                <button onclick="showToast('Video link copied!')" class="text-slate-400 hover:text-white p-1"><i data-lucide="share-2" class="w-3.5 h-3.5"></i></button>
-                                <button onclick="deleteCard(this)" class="text-slate-400 hover:text-rose-400 p-1"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
+                <p class="text-sm text-slate-400">Hələ heç bir video hazırlamamısınız.</p>
+                <button onclick="switchTab('text-to-video')" class="px-4 py-2 bg-indigo-600 text-white rounded-xl text-xs font-semibold hover:bg-indigo-500 transition">
+                    İlk Videonu Yarat
+                </button>
             </div>
         </div>
 
         <!-- TAB 4: SETTINGS VIEW -->
         <div id="view-settings" class="hidden max-w-3xl mx-auto space-y-6">
             <div class="border-b border-slate-800/80 pb-5">
-                <h2 class="text-xl font-bold text-white">Account & Engine Settings</h2>
-                <p class="text-xs text-slate-400">Configure API keys, default rendering profiles, and notifications.</p>
+                <h2 class="text-xl font-bold text-white">Sistem Tənzimləmələri</h2>
+                <p class="text-xs text-slate-400">Generasiya parametrlərini və avtomatik optimallaşdırmaları idarə edin.</p>
             </div>
 
             <div class="glass-panel p-6 rounded-2xl space-y-6">
-                <!-- API Integration -->
-                <div class="space-y-3">
-                    <h3 class="text-sm font-semibold text-white flex items-center gap-2">
-                        <i data-lucide="key" class="w-4 h-4 text-indigo-400"></i> API Integrations
-                    </h3>
-                    <div class="space-y-2">
-                        <label class="text-xs text-slate-400">Custom OpenAI / Runway / Kling API Key</label>
-                        <input type="password" value="sk-proj-982374982374982374" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-slate-200 focus:outline-none focus:border-indigo-500">
+                
+                <!-- Status Badge -->
+                <div class="p-4 rounded-xl bg-emerald-950/30 border border-emerald-500/30 flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <i data-lucide="shield-check" class="w-5 h-5 text-emerald-400"></i>
+                        <div>
+                            <p class="text-xs font-bold text-emerald-300">Aktiv Giriş Statusu</p>
+                            <p class="text-[11px] text-slate-400">Tam Ödənişsiz Versiya - Bütün Funksiyalar Açıqdır</p>
+                        </div>
                     </div>
+                    <span class="text-xs bg-emerald-500/20 text-emerald-300 px-2.5 py-1 rounded-md font-mono">PULSUZ</span>
                 </div>
-
-                <div class="h-px bg-slate-800"></div>
 
                 <!-- Default Preferences -->
                 <div class="space-y-4">
                     <h3 class="text-sm font-semibold text-white flex items-center gap-2">
-                        <i data-lucide="sliders" class="w-4 h-4 text-indigo-400"></i> Render Preferences
+                        <i data-lucide="sliders" class="w-4 h-4 text-indigo-400"></i> Render Tercihləri
                     </h3>
                     
                     <div class="flex items-center justify-between">
                         <div>
-                            <p class="text-xs font-medium text-slate-200">Auto-enhance Prompts</p>
-                            <p class="text-[11px] text-slate-400">Automatically optimize prompts using GPT-4 for higher cinematic fidelity.</p>
+                            <p class="text-xs font-medium text-slate-200">Avtomatik Prompt Təkmilləşdirilməsi</p>
+                            <p class="text-[11px] text-slate-400">Daha yaxşı kinematik görüntü üçün mətninizi AI ilə zənginləşdirin.</p>
                         </div>
                         <input type="checkbox" checked class="w-4 h-4 accent-indigo-600 rounded cursor-pointer">
                     </div>
 
                     <div class="flex items-center justify-between">
                         <div>
-                            <p class="text-xs font-medium text-slate-200">Hardware Acceleration</p>
-                            <p class="text-[11px] text-slate-400">Use WebGL GPU acceleration for instant browser timeline playback.</p>
+                            <p class="text-xs font-medium text-slate-200">Təchizat Sürətləndirilməsi (WebGL/GPU)</p>
+                            <p class="text-[11px] text-slate-400">Brauzerdə videolara anında baxış üçün GPU gücündən istifadə edin.</p>
+                        </div>
+                        <input type="checkbox" checked class="w-4 h-4 accent-indigo-600 rounded cursor-pointer">
+                    </div>
+
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-xs font-medium text-slate-200">Avtomatik Yaddaşda Saxlama</p>
+                            <p class="text-[11px] text-slate-400">Hazırlanan videoları brauzerin yerli yaddaşına (localStorage) yazın.</p>
                         </div>
                         <input type="checkbox" checked class="w-4 h-4 accent-indigo-600 rounded cursor-pointer">
                     </div>
                 </div>
 
-                <div class="pt-4">
-                    <button onclick="showToast('Settings saved successfully!')" class="py-2.5 px-6 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold shadow-md transition">
-                        Save Preferences
+                <div class="pt-4 border-t border-slate-800">
+                    <button onclick="showToast('Tənzimləmələr yadda saxlanıldı!')" class="py-2.5 px-6 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold shadow-md transition">
+                        Tənzimləri Yadda Saxla
                     </button>
                 </div>
             </div>
@@ -722,11 +650,10 @@
     <!-- FOOTER -->
     <footer class="border-t border-slate-800/60 py-6 px-4 text-center text-xs text-slate-500">
         <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
-            <p>© 2026 AI Video Studio. Powered by NextGen Generative AI Engine.</p>
+            <p>© 2026 AI Video Studio. 100% Pulsuz və Limitsiz Süni İntellekt Video Generatoru.</p>
             <div class="flex items-center gap-6">
-                <a href="#" class="hover:text-slate-400 transition">Privacy Policy</a>
-                <a href="#" class="hover:text-slate-400 transition">API Documentation</a>
-                <a href="#" class="hover:text-slate-400 transition">System Status</a>
+                <span class="text-emerald-400 flex items-center gap-1"><i data-lucide="check" class="w-3.5 h-3.5"></i> Kredit Yoxdur</span>
+                <span class="text-emerald-400 flex items-center gap-1"><i data-lucide="check" class="w-3.5 h-3.5"></i> Abunəlik Yoxdur</span>
             </div>
         </div>
     </footer>
@@ -734,20 +661,19 @@
     <!-- TOAST NOTIFICATION CONTAINER -->
     <div id="toast" class="fixed bottom-6 right-6 translate-y-20 opacity-0 bg-slate-900 border border-indigo-500/40 text-slate-100 text-xs px-4 py-3 rounded-xl shadow-2xl flex items-center gap-3 z-50 pointer-events-none">
         <i data-lucide="check-circle" class="w-4 h-4 text-indigo-400"></i>
-        <span id="toast-message">Notification message</span>
+        <span id="toast-message">Bildiriş mesajı</span>
     </div>
 
     <!-- JAVASCRIPT LOGIC -->
     <script>
         // Global State Variables
-        let currentStyle = 'Cinematic';
+        let currentStyle = 'Kinematik';
         let currentRatio = '16:9';
         let currentDuration = '5s';
         let activeVideoUrl = "https://assets.mixkit.co/videos/preview/mixkit-futuristic-city-with-flying-cars-and-lights-41551-large.mp4";
         let activeTab = 'text-to-video';
-        let userCredits = 1240;
 
-        // Dynamic Sample Video URLs for generation results
+        // High-quality video loops for simulated generations
         const generatedSamples = [
             "https://assets.mixkit.co/videos/preview/mixkit-futuristic-city-with-flying-cars-and-lights-41551-large.mp4",
             "https://assets.mixkit.co/videos/preview/mixkit-stars-in-space-background-1610-large.mp4",
@@ -755,11 +681,36 @@
             "https://assets.mixkit.co/videos/preview/mixkit-abstract-laser-lights-background-41560-large.mp4"
         ];
 
-        // Initialize icons on DOM load
+        // Default initial video items if local storage is empty
+        const defaultGalleryItems = [
+            {
+                id: 'item_1',
+                prompt: 'Gecə vaxtı neon işıqlarla bəzədilmiş kiberpank şəhərdə uçan idman maşını, kinematik kamera zoom-u, 8K keyfiyyət',
+                style: 'Cyberpunk',
+                ratio: '16:9',
+                duration: '5s',
+                url: 'https://assets.mixkit.co/videos/preview/mixkit-futuristic-city-with-flying-cars-and-lights-41551-large.mp4',
+                thumb: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=600&q=80',
+                date: 'Bu gün'
+            },
+            {
+                id: 'item_2',
+                prompt: 'Kosmik dumanlıq və qalaktikada ulduzların axını, dərin kosmos kəşfiyyatı',
+                style: 'Fantezi',
+                ratio: '16:9',
+                duration: '10s',
+                url: 'https://assets.mixkit.co/videos/preview/mixkit-stars-in-space-background-1610-large.mp4',
+                thumb: 'https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=600&q=80',
+                date: 'Dünən'
+            }
+        ];
+
+        // Initialize App
         document.addEventListener("DOMContentLoaded", () => {
             lucide.createIcons();
             setupPromptCharCounter();
             setupVideoPlayerEvents();
+            loadLibraryFromStorage();
         });
 
         // Tab Switching Logic
@@ -796,6 +747,7 @@
             } else if (tabId === 'library') {
                 document.getElementById('view-library').classList.remove('hidden');
                 document.getElementById('tab-library').className = "tab-btn flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all text-white bg-indigo-600 shadow-md shadow-indigo-600/20";
+                renderLibraryUI();
             } else if (tabId === 'settings') {
                 document.getElementById('view-settings').classList.remove('hidden');
                 document.getElementById('tab-settings').className = "tab-btn flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all text-white bg-indigo-600 shadow-md shadow-indigo-600/20";
@@ -811,7 +763,7 @@
                 promptArea.value += ", " + text;
             }
             updateCharCount();
-            showToast("Added tag to prompt");
+            showToast("Təklif mətni əlavə olundu");
         }
 
         function clearPrompt() {
@@ -834,7 +786,7 @@
             currentStyle = styleName;
             document.querySelectorAll('.style-card').forEach(card => card.classList.remove('selected'));
             element.classList.add('selected');
-            document.getElementById('meta-style-tag').innerText = `Style: ${styleName}`;
+            document.getElementById('meta-style-tag').innerText = `Üslub: ${styleName}`;
         }
 
         // Ratio Selector
@@ -877,22 +829,13 @@
             document.getElementById('upload-preview').classList.add('hidden');
         }
 
-        // SIMULATED VIDEO GENERATION PROCESS
+        // SIMULATED FREE AI VIDEO GENERATION PROCESS
         function startVideoGeneration() {
             const promptText = document.getElementById('prompt-input').value.trim();
             if (!promptText) {
-                showToast("Please enter a prompt before generating.");
+                showToast("Zəhmət olmasa video üçün mətn yazın.");
                 return;
             }
-
-            if (userCredits < 30) {
-                showToast("Insufficient credits!");
-                return;
-            }
-
-            // Deduct Credits
-            userCredits -= 30;
-            document.getElementById('credit-count').innerText = userCredits.toLocaleString();
 
             // UI Elements
             const generateBtn = document.getElementById('generate-btn');
@@ -909,16 +852,16 @@
             loadingOverlay.classList.add('flex');
 
             // Update badge status
-            document.getElementById('preview-badge').innerText = "RENDERING";
+            document.getElementById('preview-badge').innerText = "RENDER EDİLİR";
             document.getElementById('preview-badge').className = "text-xs font-mono bg-amber-500/20 text-amber-400 border border-amber-500/30 px-2 py-0.5 rounded-md";
 
-            // Multi-step progress simulation
+            // Multi-step progress simulation in Azerbaijani
             const steps = [
-                { percent: 15, text: "Analyzing prompt & tokens...", sub: "Deconstructing visual semantic space" },
-                { percent: 40, text: "Generating initial keyframes...", sub: "Diffusion sampling process step 20/50" },
-                { percent: 75, text: "Interpolating motion frames...", sub: "Applying camera motion algorithms" },
-                { percent: 90, text: "Enhancing resolution...", sub: "Super-resolution & temporal smoothing" },
-                { percent: 100, text: "Finalizing MP4 stream...", sub: "Encoding audio/video channels" }
+                { percent: 15, text: "Prompt və semantik analiz aparılır...", sub: "Visual vizuallaşdırma parametrləri təyin edilir" },
+                { percent: 40, text: "Əsas kadrlar (keyframes) yaradılır...", sub: "Süni intellekt difuziya modeli addım 20/50" },
+                { percent: 75, text: "Kamera hərəkətləri tətbiq olunur...", sub: "Kadrlararası dinamik axın və rəvanlıq" },
+                { percent: 90, text: "Görüntü keyfiyyəti artırılır...", sub: "1080p Ultra HD optimallaşdırılması" },
+                { percent: 100, text: "Video hazırdır!", sub: "MP4 faylı oxudulur" }
             ];
 
             let stepIndex = 0;
@@ -934,7 +877,7 @@
                     clearInterval(interval);
                     completeVideoGeneration(promptText);
                 }
-            }, 1200);
+            }, 1000);
         }
 
         function completeVideoGeneration(promptText) {
@@ -954,15 +897,15 @@
             generateBtn.disabled = false;
             generateBtn.classList.remove('opacity-50', 'cursor-not-allowed');
 
-            document.getElementById('preview-badge').innerText = "LIVE";
+            document.getElementById('preview-badge').innerText = "CANLI";
             document.getElementById('preview-badge').className = "text-xs font-mono bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded-md";
 
             document.getElementById('active-prompt-display').innerText = `"${promptText}"`;
 
-            // Add generated video to Library dynamically
-            addToLibrary(promptText, randomSample);
+            // Save to LocalStorage Gallery
+            saveToGallery(promptText, randomSample);
 
-            showToast("Video generation completed!");
+            showToast("Video uğurla yaradıldı! (PULSUZ)");
         }
 
         // Custom Video Player Controls
@@ -1016,7 +959,7 @@
         function toggleFullscreen() {
             const container = document.getElementById('player-container');
             if (!document.fullscreenElement) {
-                container.requestFullscreen().catch(err => alert(`Fullscreen error: ${err.message}`));
+                container.requestFullscreen().catch(err => console.error(err));
             } else {
                 document.exitFullscreen();
             }
@@ -1024,7 +967,7 @@
 
         // Download Action
         function downloadActiveVideo() {
-            showToast("Preparing download package...");
+            showToast("Video yüklənməyə hazırlanır...");
             const a = document.createElement('a');
             a.href = activeVideoUrl;
             a.download = 'AI_Studio_Video.mp4';
@@ -1038,50 +981,116 @@
             document.getElementById('prompt-input').value = promptText;
             updateCharCount();
             switchTab('text-to-video');
-            showToast("Loaded prompt into editor");
+            showToast("Prompt redaktora köçürüldü");
         }
 
         function shareVideo() {
             document.execCommand('copy');
-            showToast("Video URL copied to clipboard!");
+            showToast("Video keçidi kopyalandı!");
         }
 
-        // Library Management Dynamic Injection
-        function addToLibrary(promptText, videoUrl) {
-            const libraryGrid = document.getElementById('library-grid');
+        // PERSISTENT STORAGE / GALLERY LOGIC
+        function loadLibraryFromStorage() {
+            const stored = localStorage.getItem('ai_video_studio_gallery');
+            let items = stored ? JSON.parse(stored) : null;
             
-            const cardHTML = `
+            if (!items || items.length === 0) {
+                items = defaultGalleryItems;
+                localStorage.setItem('ai_video_studio_gallery', JSON.stringify(items));
+            }
+
+            renderGalleryItems(items);
+        }
+
+        function saveToGallery(promptText, videoUrl) {
+            const stored = localStorage.getItem('ai_video_studio_gallery');
+            let items = stored ? JSON.parse(stored) : defaultGalleryItems;
+
+            const newItem = {
+                id: 'item_' + Date.now(),
+                prompt: promptText,
+                style: currentStyle,
+                ratio: currentRatio,
+                duration: currentDuration,
+                url: videoUrl,
+                thumb: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=600&q=80',
+                date: 'İndi'
+            };
+
+            items.unshift(newItem);
+            localStorage.setItem('ai_video_studio_gallery', JSON.stringify(items));
+            renderGalleryItems(items);
+        }
+
+        function renderGalleryItems(items) {
+            const grid = document.getElementById('library-grid');
+            const emptyMsg = document.getElementById('empty-library-msg');
+            const libraryCount = document.getElementById('library-count');
+
+            libraryCount.innerText = items.length;
+
+            if (items.length === 0) {
+                grid.innerHTML = '';
+                emptyMsg.classList.remove('hidden');
+                return;
+            } else {
+                emptyMsg.classList.add('hidden');
+            }
+
+            grid.innerHTML = items.map(item => `
                 <div class="glass-panel rounded-2xl overflow-hidden group hover:border-indigo-500/50 transition">
                     <div class="relative aspect-video bg-slate-950 overflow-hidden">
                         <video class="w-full h-full object-cover" muted loop>
-                            <source src="${videoUrl}" type="video/mp4">
+                            <source src="${item.url}" type="video/mp4">
                         </video>
                         <div class="absolute inset-0 bg-slate-950/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center gap-2">
-                            <button onclick="loadLibraryItem('${videoUrl}', '${promptText}')" class="p-2.5 bg-indigo-600 text-white rounded-xl shadow-lg hover:scale-110 transition">
+                            <button onclick="loadLibraryItem('${item.url}', \`${item.prompt}\`)" class="p-2.5 bg-indigo-600 text-white rounded-xl shadow-lg hover:scale-110 transition">
                                 <i data-lucide="play" class="w-4 h-4 fill-white"></i>
                             </button>
                         </div>
-                        <span class="absolute bottom-2 right-2 bg-slate-950/80 backdrop-blur-md text-slate-300 text-[10px] font-mono px-2 py-0.5 rounded">${currentDuration}</span>
+                        <span class="absolute bottom-2 right-2 bg-slate-950/80 backdrop-blur-md text-slate-300 text-[10px] font-mono px-2 py-0.5 rounded">${item.duration || '5s'}</span>
                     </div>
                     <div class="p-4 space-y-3">
                         <div class="flex items-center justify-between text-xs">
-                            <span class="px-2 py-0.5 rounded-full bg-indigo-500/10 text-indigo-400 font-medium border border-indigo-500/20">${currentStyle}</span>
-                            <span class="text-slate-500 text-[11px]">Just now</span>
+                            <span class="px-2 py-0.5 rounded-full bg-indigo-500/10 text-indigo-400 font-medium border border-indigo-500/20">${item.style}</span>
+                            <span class="text-slate-500 text-[11px]">${item.date}</span>
                         </div>
-                        <p class="text-xs text-slate-300 line-clamp-2">${promptText}</p>
+                        <p class="text-xs text-slate-300 line-clamp-2">${item.prompt}</p>
                         <div class="flex items-center justify-between pt-2 border-t border-slate-800/60">
-                            <span class="text-[10px] font-mono text-slate-400">1080p • ${currentRatio}</span>
+                            <span class="text-[10px] font-mono text-slate-400">1080p • ${item.ratio || '16:9'}</span>
                             <div class="flex gap-2">
-                                <button onclick="showToast('Video link copied!')" class="text-slate-400 hover:text-white p-1"><i data-lucide="share-2" class="w-3.5 h-3.5"></i></button>
-                                <button onclick="deleteCard(this)" class="text-slate-400 hover:text-rose-400 p-1"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
+                                <button onclick="showToast('Keçid kopyalandı!')" class="text-slate-400 hover:text-white p-1"><i data-lucide="share-2" class="w-3.5 h-3.5"></i></button>
+                                <button onclick="deleteGalleryItem('${item.id}')" class="text-slate-400 hover:text-rose-400 p-1"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
                             </div>
                         </div>
                     </div>
                 </div>
-            `;
-            
-            libraryGrid.insertAdjacentHTML('afterbegin', cardHTML);
+            `).join('');
+
             lucide.createIcons();
+        }
+
+        function deleteGalleryItem(id) {
+            const stored = localStorage.getItem('ai_video_studio_gallery');
+            if (stored) {
+                let items = JSON.parse(stored);
+                items = items.filter(item => item.id !== id);
+                localStorage.setItem('ai_video_studio_gallery', JSON.stringify(items));
+                renderGalleryItems(items);
+                showToast("Video qalereyadan silindi");
+            }
+        }
+
+        function clearAllLibrary() {
+            localStorage.setItem('ai_video_studio_gallery', JSON.stringify([]));
+            renderGalleryItems([]);
+            showToast("Bütün qalereya təmizləndi");
+        }
+
+        function renderLibraryUI() {
+            const stored = localStorage.getItem('ai_video_studio_gallery');
+            const items = stored ? JSON.parse(stored) : [];
+            renderGalleryItems(items);
         }
 
         function loadLibraryItem(videoUrl, promptText) {
@@ -1091,13 +1100,7 @@
             activeVideoUrl = videoUrl;
             document.getElementById('active-prompt-display').innerText = `"${promptText}"`;
             switchTab('text-to-video');
-            showToast("Loaded project into player");
-        }
-
-        function deleteCard(element) {
-            const card = element.closest('.glass-panel');
-            card.remove();
-            showToast("Project deleted from library");
+            showToast("Video oxuducuya yükləndi");
         }
 
         // Toast Notification System
